@@ -8,6 +8,9 @@
     <body>
         <!-- Area for user login-->
         <div class="user-login">
+            <div class="welcome-msg">
+                <h1>Welcome!</h1>
+            </div>
             <div class="user-pass-text">
                 <label for="username">Username</label>
                 <input type="text" id="username" placeholder="Enter username" required>
@@ -16,12 +19,18 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter password" required>
             </div>
-            <button onclick="loginValidation()">Login</button>
            
             <div class="forgot-password">
                 <a href="#" onclick="resetPassForm()">Forgot My Password?</a>
             </div>
-
+            <div class="role">
+                <button class="role-button" onclick="selectRole(this)">Student</button>
+                <button class="role-button" onclick="selectRole(this)">Teacher</button>
+                <button class="role-button" onclick="selectRole(this)">Administrator</button>
+            </div>
+            <div class="submit">
+                <button class="submit-button" onclick="loginValidation()">Login</button>
+            </div>
             <!-- This is the password reset form if the user forgot their credentials-->
             <div class="pass-reset" id="pass-reset">
                 <label for="email">Enter your email to send instructions on how to reset your password:</label>
