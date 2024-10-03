@@ -32,6 +32,65 @@ body {
     border-radius: 5px;
 }
 
+/* Defines the font and alignment of the welcome message */
+.welcome-msg {
+    text-align: center;
+    font-family: 'Times New Roman', Times, serif
+}
+
+/* This moves the "forgot my password" button to the right */
+.forgot-password {
+    text-align: right;
+    padding: 0px 0px 10px 0px;
+}
+
+/* This centers the login button */
+.submit {
+    text-align: center;
+}
+
+/* This makes the login button looks nice */
+.submit-button {
+    text-align: center;
+    color: black;
+    background-color: rgb(164, 180, 148);
+    padding: 10px 20px;
+    border: none;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Change color when user hovers over the login button */
+.submit-button:hover {
+    background-color: rgb(140, 160, 125); 
+}
+
+/* Align the role bar in the center of the frame */
+.role {
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* Make the role bar appear nice */
+.role-button {
+    padding: 10px 20px;
+    margin: 5px;
+    background-color: rgb(220, 220, 220);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Change the color of the role button when selected */
+.role-button.active {
+    background-color: rgb(59, 82, 73);/* Highlight color */
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
 /* Header containing login text and SUNY Brockport's green background */
 /*.top {
     color: white;
