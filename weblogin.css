@@ -1,17 +1,21 @@
 
 /* Center the login */
 body {
-    margin: 100px auto; 
-    height: 80vh;
+    margin: 0px auto; 
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgb(59, 82, 73);
 }
 
 /* Container that centers the username and password texts and inputs */
 .user-login {
     padding: 20px;
     width: 300px;
+    background-color: rgb(190, 197, 173);
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Makes the "Username" and "Password" texts bold */
@@ -21,14 +25,15 @@ body {
 
 /* Provides larger and nicer textboxes for user inputs */
 .user-login input {
-    width: 100%;
+    width: 95%;
     padding: 10px;
     margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 /* Header containing login text and SUNY Brockport's green background */
-.top {
-    background-color: rgb(39, 92, 54);
+/*.top {
     color: white;
     padding: 20px;
     text-align: left;
@@ -38,7 +43,7 @@ body {
     top: 0;
     left: 0;
     z-index: 1;
-}
+}*/
 
 /* This makes the "forgot your password form" invisible until the user clicks the button
 */
