@@ -7,6 +7,7 @@ body {
     justify-content: center;
     align-items: center;
     background-color: rgb(59, 82, 73);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Container that centers the username and password texts and inputs */
@@ -35,7 +36,6 @@ body {
 /* Defines the font and alignment of the welcome message */
 .welcome-msg {
     text-align: center;
-    font-family: 'Times New Roman', Times, serif
 }
 
 /* This moves the "forgot my password" button to the right */
@@ -72,12 +72,13 @@ body {
 .role {
     text-align: center;
     margin: 20px 0;
+    font-size: 12px;
 }
 
 /* Make the role bar appear nice */
 .role-button {
-    padding: 10px 20px;
-    margin: 5px;
+    padding: 10px 5px;
+    margin: 0px;
     background-color: rgb(220, 220, 220);
     border: none;
     border-radius: 5px;
@@ -90,6 +91,13 @@ body {
 .role-button.active {
     background-color: rgb(59, 82, 73);/* Highlight color */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Design of the divider that separates user input and forgot password prompt */
+.divider {
+    display: none;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
 }
 /* Header containing login text and SUNY Brockport's green background */
 /*.top {
