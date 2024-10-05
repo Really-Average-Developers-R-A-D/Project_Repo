@@ -7,6 +7,7 @@ function loginValidation() {
     if (username == "Joe" && password == "passpass") {
         message.innerHTML = 'Login successful!';
         message.className = 'success';
+        window.location.href = 'landingStudent.html';
     } else {
         message.innerHTML = "Invalid credentials";
         message.className = 'error';
