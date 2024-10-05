@@ -1,0 +1,48 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Landing Page</title>
+        <link rel="stylesheet" href="student.css">
+    </head>
+    <body>
+        <div class="container">
+            <!-- Navigation Bar -->
+            <nav class="nav-bar">
+                <div class="nav-image">
+                    <img src="Brockport_logo.jpg" alt="Logo">
+                </div>
+                <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li class="dropdown">
+                        <a href="#">Course Management<span class="arrow-down"></span></a>
+                        <ul class="dropdown-content">
+                            <li><a href="#">Available Courses</a></li>
+                            <li><a href="#">Dropped Courses</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h1>Dashboard</h1>
+                <div class="course-dashboard">
+                    <h2>My Courses</h2>
+                    <div class="course-list">
+                        <!-- Add multiple courses for the dashboard -->
+                        <div class="course-item">Course 1: Introduction to Programming</div>
+                        <div class="course-item">Course 2: Data Structures</div>
+                        <div class="course-item">Course 3: Operating Systems</div>
+                        <div class="course-item">Course 4: Web Development</div>
+                        <div class="course-item">Course 5: Algorithms</div>
+                        <div class="course-item">Course 6: Software Engineering</div>
+                        <!-- Add more course items to test the scrollbar -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- External script -->
+        <script src="studentPage.js"></script>  
+    </body>
+</html>
