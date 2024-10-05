@@ -89,7 +89,7 @@ body {
 
 /* Change the color of the role button when selected */
 .role-button.active {
-    background-color: rgb(59, 82, 73);/* Highlight color */
+    background-color:  rgb(140, 160, 125); ;/* Highlight color */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -99,18 +99,6 @@ body {
     border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     margin: 10px 0;
 }
-/* Header containing login text and SUNY Brockport's green background */
-/*.top {
-    color: white;
-    padding: 20px;
-    text-align: left;
-    border: solid black;
-    width: 100%;
-    position: fixed;          
-    top: 0;
-    left: 0;
-    z-index: 1;
-}*/
 
 /* This makes the "forgot your password form" invisible until the user clicks the button
 */
