@@ -9,6 +9,19 @@ body {
 .container {
     display: flex;
     height: 100vh;
+    position: relative;
+}
+
+/* Contains the user's name and initials on the top right of the screen */
+.user-info {
+    position: absolute;
+    top: 20px;
+    right: 50px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    color: rgb(52, 37, 47);
+    border: solid black;
 }
 
 /* Style the navigation bar */
@@ -89,6 +102,7 @@ body {
     flex-grow: 1;
     padding: 20px;
     background-color: rgb(164, 180, 148);
+    color: rgb(52, 37, 47);
 }
 
 /* Style for the dashboard information */

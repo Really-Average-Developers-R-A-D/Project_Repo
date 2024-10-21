@@ -1,3 +1,61 @@
+
+<!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Registration Website</title>
+        <link rel="stylesheet" href="weblogin.css">
+    </head>
+    <body>
+        <!-- Area for user login-->
+        <div class="user-login">
+            <div class="welcome-msg">
+                <h1>Welcome!</h1>
+            </div>
+            <div class="user-pass-text">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="Enter username" required>
+            </div>
+            <div class="user-pass-text">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+            <div id="forgot-password">
+                <a href="#" onclick="resetPassForm()">Forgot My Password?</a>
+            </div>
+            <!-- Store role information-->
+            <input type="hidden" id="role-button" name="role" value="Student">
+            <div id="role">
+                <h2>Select Your Role:</h2>
+                <button id="role-button" data-role="Student" onclick="selectRole(this)">Student</button>
+                <button id="role-button" data-role="Teacher" onclick="selectRole(this)">Teacher</button>
+                <button id="role-button" data-role="Administrator" onclick="selectRole(this)">Administrator</button>
+            </div>
+            <div class="login">
+                <button id="loginBtn">Login</button>
+            </div>
+            <!-- This is the password reset form if the user forgot their credentials-->
+            <div id="divider">
+            </div>
+            <div class="pass-reset" id="pass-reset">
+                <label for="email">Enter your email to send instructions on how to reset your password:</label>
+                <input type="email" id="email-reset" placeholder="Enter your email" required>
+                <button class = "submit-button" onclick="passReset()">Submit</button>
+            </div>
+
+            <!-- Message will output to the user based on login results-->
+            <div id="errorMsg"></div>
+        </div>
+        <script src="login.js"></script>
+    </body>
+</html>
+
+
+
+
+
+<!--
 <!DOCTYPE HTML>
 <html lang="en">
     <head>
@@ -5,10 +63,9 @@
         <title>Registration Website</title>
         <link rel="stylesheet" href="weblogin.css">
     </head>
-    <body>
+    <body> -->
         <!-- Area for user login-->
-        <div class="user-login">
-        <!-- Cool Comment -->
+       <!-- <div class="user-login">
             <div class="welcome-msg">
                 <h1>Welcome!</h1>
             </div>
@@ -22,29 +79,31 @@
             </div>
             <div class="forgot-password">
                 <a href="#" onclick="resetPassForm()">Forgot My Password?</a>
-            </div>
+            </div> -->
+            <!-- Store role information-->
+            <!--<input type="hidden" id="role" name="role" value="Student">
             <div class="role">
                 <h2>Select Your Role:</h2>
-                <button class="role-button" onclick="selectRole(this)">Student</button>
-                <button class="role-button" onclick="selectRole(this)">Teacher</button>
-                <button class="role-button" onclick="selectRole(this)">Administrator</button>
+                <button class="role-button" data-role="Student" onclick="selectRole(this)">Student</button>
+                <button class="role-button" data-role="Teacher" onclick="selectRole(this)">Teacher</button>
+                <button class="role-button" data-role="Administrator" onclick="selectRole(this)">Administrator</button>
             </div>
-            <div class="submit">
-                <button class="submit-button" onclick="loginValidation()">Login</button>
-            </div>
+            <div class="login">
+                <button class="login-button" id="login-button">Login</button>
+            </div>-->
             <!-- This is the password reset form if the user forgot their credentials-->
-            <div class="divider" id="divider">
+            <!-- <div class="divider" id="divider">
             </div>
             <div class="pass-reset" id="pass-reset">
                 <label for="email">Enter your email to send instructions on how to reset your password:</label>
                 <input type="email" id="email-reset" placeholder="Enter your email" required>
                 <button class = "submit-button" onclick="passReset()">Submit</button>
-            </div>
+            </div> -->
 
             <!-- Message will output to the user based on login results-->
-            <div class="message" id="message"></div>
-        </div>  
+            <!-- <div class="message" id="message"></div>
+        </div>  -->
         <!-- External script -->
-        <script src="login.js"></script>  
+        <!-- <script src="login.js"></script>  
     </body>
-</html>
+</html> -->

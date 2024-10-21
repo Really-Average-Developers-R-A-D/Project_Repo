@@ -44,12 +44,12 @@ body {
     padding: 0px 0px 10px 0px;
 }
 
-/* This centers the login button */
+/* This centers the submit button */
 .submit {
     text-align: center;
 }
 
-/* This makes the login button looks nice */
+/* This makes the submit button looks nice */
 .submit-button {
     text-align: center;
     color: black;
@@ -63,20 +63,44 @@ body {
     transition: background-color 0.3s ease;
 }
 
-/* Change color when user hovers over the login button */
+/* Change color when user hovers over the submit button */
 .submit-button:hover {
     background-color: rgb(140, 160, 125); 
 }
 
+/* This centers the login button */
+.login {
+    text-align: center;
+}
+
+/* This makes the login button looks nice */
+#loginBtn {
+    text-align: center;
+    color: black;
+    background-color: rgb(164, 180, 148);
+    padding: 10px 20px;
+    border: none;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Change color when user hovers over the login button */
+#loginBtn:hover {
+    background-color: rgb(140, 160, 125); 
+}
+
 /* Align the role bar in the center of the frame */
-.role {
+#role {
     text-align: center;
     margin: 20px 0;
     font-size: 12px;
 }
 
 /* Make the role bar appear nice */
-.role-button {
+#role-button {
     padding: 10px 5px;
     margin: 0px;
     background-color: rgb(220, 220, 220);
@@ -88,7 +112,7 @@ body {
 }
 
 /* Change the color of the role button when selected */
-.role-button.active {
+#role-button.active {
     background-color:  rgb(140, 160, 125); ;/* Highlight color */
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
