@@ -1,0 +1,110 @@
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Landing Page</title>
+        <link rel="stylesheet" href="global.css">
+    </head>
+    <body>
+        <div class="container">
+            <!-- Icon -->
+            <div class="icon-container">
+                <div class="icon">
+                    <p>TT</p>
+                </div>
+                <div class="name">
+                    <p>Trinity Thiele</p>
+                </div>
+            </div>
+            <!-- Navigation Bar -->
+            <nav class="nav-bar">
+                <div class="nav-image">
+                    <img src="Brockport_logo.jpg" alt="Logo">
+                </div>
+                <ul>
+                    <li><a href="#">Dashboard</a></li>
+                    <li class="dropdown">
+                        <a href="#">Course Management<span class="arrow-down"></span></a>
+                        <ul class="dropdown-content">
+                            <li><a href="#">Available Courses</a></li>
+                            <li><a href="#">Dropped Courses</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                <div class = "settings">
+                    <a href="login.html">Logout</a>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="content">
+                <h1>Dashboard</h1>
+                <div class="course-dashboard">
+                    <h1>My Courses</h1>
+                    <div class="course-list">
+                        <!-- Add multiple courses for the dashboard -->
+                        <div class="course-item">
+                            <div class="course-info">
+                                <div class="course-title">
+                                    <h2>CSC 401</h2> Lecturer: Daniel Rodgers
+                                </div>
+                                <div class="course-title">
+                                    <h2>Programming Languages</h2> Enrolled: 9/29/24
+                                </div>
+                            </div>
+                            <p><strong>Description:</strong> Prerequisites: CSC 205 and 219 and 311. Studies the concepts of various programming languages. Includes these topics: 
+                                history of languages, design principles, formal syntax and semantics, implementation: compilation and interpretation, comparative study of features 
+                                in various languages considering criteria such as binding, scope, type conversion, data abstraction, parameter passing techniques, exceptions and I/O. 
+                                Covers various programming paradigms such as procedural, object-oriented, functional, logic and scripting. Requires extensive programmming.</p>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-info">
+                                <div class="course-title">
+                                    <h2>CSC 414</h2> Professor: Dr. Yu
+                                </div>
+                                <div class="course-title">
+                                    <h2>OS Parallel Computing</h2> Enrolled: 9/29/24
+                                </div>
+                            </div>
+                            <p><strong>Description:</strong> Prerequisites: CSC 209 & 219 & 311. Covers basic principles of operating systems and parallel and distributed computing. 
+                                Includes these topics: OS role, components and structure, process concepts, threads, CPU scheduling, memory management, concurrent processes, 
+                                interprocess coordination and communication, parallelism versus concurrency, parallel architecture, algorithms, and decomposition. Requires 
+                                extensive programming.</p>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-info">
+                                <div class="course-title">
+                                    <h2>CSC 423</h2> Professor: ------
+                                </div>
+                                <div class="course-title">
+                                    <h2>Web App Development</h2> Enrolled: 9/29/24
+                                </div>
+                            </div>
+                            <p><strong>Description:</strong> Prerequisites: CSC 209 and CSC 422 or CIS 422. Covers the basic principles involved in developing Web-based applications
+                                 that operate with a back-end relational database. Includes these topics: basics of HTTP-based client-server systems, web page creation with XHTML/CSS,
+                                  client-side scripting, server-side software development, interfacing to relational databases, model-view separation, and database serialization/viewing
+                                   using XML/XSLT. Requires team project involving design/setup of database server and development of application interfacing to database.</p>
+                        </div>
+                        <div class="course-item">
+                            <div class="course-info">
+                                <div class="course-title">
+                                    <h2>CSC 427</h2> Professor: Sandeep Mitra
+                                </div>
+                                <div class="course-title">
+                                    <h2>Software Engineering</h2> Enrolled: 9/29/24
+                                </div>
+                            </div>
+                            <p><strong>Description:</strong>Prerequisite: CSC 205. Provides an introduction to software engineering methodologies and programming-in-the-large.
+                                 Includes these topics: life-cycle models, development standards, project organization, estimation techniques, requirements modeling, specification 
+                                 techniques, object-oriented and structured approaches to software design, implementation issues, testing, verification and validation, maintenance and
+                                documentation. Requires students to work in teams developing a large-scale software product. Develops technical communication and writing skills.
+                                 Requires extensive programming.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- External script -->
+        <script src="studentPage.js"></script>  
+    </body>
+</html>
