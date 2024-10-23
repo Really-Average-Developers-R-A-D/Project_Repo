@@ -1,0 +1,46 @@
+
+
+<header class="header">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <div class="profile">
+        <div class="profile-icon"><%= user.username.substring(0, 2).toUpperCase() %></div>
+        <span><%= user.username %></span>
+    </div>
+    <link rel="stylesheet" href="/css/admin-style.css">
+    <link rel="stylesheet" href="/css/main-style.css">
+</header>
+
+<div class="courses-container">
+    <h2 class="courses-title">Quick Actions</h2>
+    <div class="courses-list">
+        <div class="course-card">
+            <div class="course-header">
+                <h3 class="course-code">User Management</h3>
+            </div>
+            <p class="course-description">Create, update, and manage user accounts for students, teachers, and administrators.</p>
+            <div class="enrollment-date">
+                <a href="/admin/users" style="color: #2C4A3E; text-decoration: none;">Manage Users →</a>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-header">
+                <h3 class="course-code">Major Management</h3>
+            </div>
+            <p class="course-description">Create and manage academic majors and their associated courses.</p>
+            <div class="enrollment-date">
+                <a href="/admin/majors" style="color: #2C4A3E; text-decoration: none;">Manage Majors →</a>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <div class="course-header">
+                <h3 class="course-code">Course Overview</h3>
+            </div>
+            <p class="course-description">View and monitor all courses across all majors and their current status.</p>
+            <div class="enrollment-date">
+                <a href="/admin/courses" style="color: #2C4A3E; text-decoration: none;">View All Courses →</a>
+            </div>
+        </div>
+    </div>
+</div>
