@@ -1,38 +1,59 @@
+<!--landingStudent.html-->
 <!DOCTYPE HTML>
 <html lang="en">
+    <!--Basic student website information-->
     <head>
         <meta charset="UTF-8">
         <title>Student Landing Page</title>
-        <link rel="stylesheet" href="student.css">
+        <link rel="stylesheet" href="css/student.css">
     </head>
     <body>
+        <!--Encompasses the entire visible page-->
         <div class="container">
-            <!-- Navigation Bar -->
+
+            <!--The navigation bar on the side and top-->
             <nav class="nav-bar">
+
+                <!--The user's initials and full name on the top right-->
                 <div class="user-info">
-                    <span id="user-name">Joe Smith</span>
                     <div class="initials">
-                        <span id="user-initials">JS</span>
+                        <span id="user-initials"></span>
+                    </div class="name">
+                        <span id="user-name">Loading Credentials...</span>
                     </div>
-                </div>
+
+                <!--SUNY Brockport image-->
                 <div class="nav-image">
-                    <img src="Brockport_logo.jpg" alt="Logo">
+                    <img src="images/Brockport_logo.jpg" alt="Logo">
                 </div>
+
+                <!--Navigation bar down the side providing user functionality-->
                 <ul>
+                    <!--Button to return the user to the landing page home screen-->
                     <li><a href="#">Dashboard</a></li>
+
+                    <!--Dropdown menu for course management with additional options for the user-->
                     <li class="dropdown">
                         <a href="#">Course Management<span class="arrow-down"></span></a>
                         <ul class="dropdown-content">
                             <li><a href="#">Available Courses</a></li>
                             <li><a href="#">Dropped Courses</a></li>
                         </ul>
+
+                    <!--Shows the password reset form on the bottom, if clicked-->
+                    <li><a href="#" onclick=resetPass()>Change Password</a></li>
+
+                    <!--Logs the user out and returns them to the login page-->
+                    <li><a href="Webtest.html">Logout</a></li>
                     </li>
                 </ul>
             </nav>
 
-            <!-- Main Content -->
+            <!-- Center Page Content -->
             <div class="content">
                 <h1>Dashboard</h1>
+
+                <!--Displays revelant information for user-->
                 <div class="course-dashboard">
                     <h2>My Courses</h2>
                     <div class="course-list">
@@ -43,12 +64,28 @@
                         <div class="course-item">Course 4: Web Development</div>
                         <div class="course-item">Course 5: Algorithms</div>
                         <div class="course-item">Course 6: Software Engineering</div>
-                        <!-- Add more course items to test the scrollbar -->
                     </div>
+                </div>
+                <!--The password reset form appears on the bottom of the page-->
+                <div id="pass-reset" class="pass-reset">
+                    <span class="close">&times;</span>
+                    <form id="changePasswordForm">
+                        <label for="oldPassword">Current Password:</label>
+                        <input type="password" id="oldPassword" name="oldPassword" required>
+                            
+                        <label for="newPassword">New Password:</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
+                
+                        <button type="submit">Change Password</button>
+                    </form>
+
+                    <!--Change color of text depending on success or fail-->
+                    <p id="changePasswordError" style="color: red;"></p>
+                    <p id="changePasswordSuccess" style="color: green;"></p>
                 </div>
             </div>
         </div>
         <!-- External script -->
-        <script src="studentPage.js"></script>  
+        <script src="js/studentPage.js"></script>
     </body>
 </html>

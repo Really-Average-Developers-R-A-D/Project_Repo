@@ -1,4 +1,7 @@
+
 //login.js(frontend)
+
+// Collect user inputs and selections to be sent to the backend
 document.querySelector("#loginBtn").addEventListener("click", async function() {
     // Get form data
     const username = document.querySelector("#username").value;
@@ -7,6 +10,7 @@ document.querySelector("#loginBtn").addEventListener("click", async function() {
     login(username, password, role);
 });
 
+//This function updates the user's role based off the user's selection
 function selectRole(button) {
     // Remove the active status from all buttons
     let buttons = document.querySelectorAll('#role-button');
@@ -19,26 +23,58 @@ function selectRole(button) {
     document.querySelector("#role").value = button.getAttribute("data-role");
 }
 
+// This function authenticates the user and sends inputs to the backend
 async function login(username, password, role) {
-    const response = await fetch("/api/auth", {
+    /*console.log("About to run POST");
+    console.log("Username:", username);
+    console.log("Password:", password);
+    console.log("User Role:", role);
+    */
+    const response = await fetch("http://localhost:3000/api/auth", {
         method: "POST",
-        body: new URLSearchParams({ username: username, password_: password, user_role: role })
+        headers: {
+            "Content-Type": "application/json" // Changed to application/json
+        },
+        body: JSON.stringify({
+            username: username, 
+            password: password, 
+            user_role: role
+        })
+        
     });
     
     const loginStatus = document.querySelector("#errorMsg");
+    //console.log("Response recieved: ", response);
+ 
+    // Authenticate the user's credentials, otherwise display error message 
     if (response.ok) {
         const tokenResponse = await response.json();
         localStorage.setItem("token", tokenResponse.token);
-        loginStatus.innerHTML = `Successfully authenticated as ${username}`;
+        loginStatus.innerHTML = `Successfully authenticated as '${username}'\n loading...`;
         loginStatus.className = 'success';
-        window.location.href = '/landingStudent.html';
+        setTimeout(() => {
+            if (role == "student") {
+                window.location.href = 'http://127.0.0.1:5500/public/landingStudent.html';
+            } else if (role == "teacher") {
+                window.location.href = 'http://127.0.0.1:5500/public/landingTeacher.html';
+            }
+        }, 1000);
     } else {
         loginStatus.innerHTML = `Login failed. Try again`;
         loginStatus.className = 'error';
     }
+    //console.log("login.js");
     clearForm();
 }
 
+// Clear the form if authentication fails
+function clearForm() {
+    document.querySelector("#username").value = "";
+    document.querySelector("#password").value = "";
+    document.querySelector("#role").value = "";
+}
+
+// Show the password reset form
 function resetPassForm() {
     const emailReset = document.querySelector("#pass-reset");
     const divider = document.querySelector("#divider");
@@ -64,10 +100,5 @@ function passReset() {
         message.innerHTML = 'Please enter a valid email address!';
         message.className = 'message error';
     }
-}
-
-function clearForm() {
-    document.querySelector("#username").value = "";
-    document.querySelector("#password").value = "";
-    document.querySelector("#role").value = "Student";
+    
 }

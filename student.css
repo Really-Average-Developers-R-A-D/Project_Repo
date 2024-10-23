@@ -1,3 +1,5 @@
+
+/*student.css*/
 /* Define page dimensions */
 body {
     margin: 0;
@@ -14,14 +16,38 @@ body {
 
 /* Contains the user's name and initials on the top right of the screen */
 .user-info {
-    position: absolute;
-    top: 20px;
-    right: 50px;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    color: rgb(52, 37, 47);
-    border: solid black;
+    position: fixed; 
+    top: 10px; 
+    right: 30px;
+    display: flex; 
+    align-items: center;
+}
+
+/* User initials at the top right of the page */
+.initials {
+    width: 65px;
+    height: 65px; 
+    background-color: rgb(59, 82, 73); 
+    color: white; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px; 
+    font-weight: bold; 
+    border-radius: 5px; 
+    margin-right: 15px; 
+}
+
+/* The user's full name at the top right of the page */
+.name {
+    color: black; 
+    font-size: 25px;
+}
+
+/* Hide the password reset form */
+.pass-reset {
+    display: none;
+    margin-top: 15px;
 }
 
 /* Style the navigation bar */
@@ -115,12 +141,14 @@ body {
     overflow-y: auto;  /* Enable vertical scroll if content exceeds max-height */
 }
 
+/* Style the course display list */
 .course-list {
     max-height: 300px; /* Controls height for the course list */
     overflow-y: auto;  /* Enables vertical scrolling when there are many courses */
     padding: 10px;
 }
 
+/* Style each course section in the course list */
 .course-item {
     background-color: rgb(220, 220, 220);
     margin: 10px 0;
@@ -129,6 +157,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
+/* Change the color of the course when hover */
 .course-item:hover {
     background-color: rgb(200, 200, 200);
 }
@@ -138,11 +167,13 @@ body {
     width: 8px;
 }
 
+/* Style the scroll bar */
 .course-list::-webkit-scrollbar-thumb {
     background-color: rgb(59, 82, 73);
     border-radius: 4px;
 }
 
+/* Style the scroll bar */
 .course-list::-webkit-scrollbar-track {
     background-color: rgb(220, 220, 220);
 }

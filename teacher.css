@@ -12,8 +12,8 @@ body {
     height: 100vh;
 }
 
-/* The parent container that holds the icon */
-.icon-container {
+/* Contains the user's name and initials on the top right of the screen */
+.user-info {
     position: fixed; 
     top: 10px; 
     right: 30px;
@@ -21,8 +21,8 @@ body {
     align-items: center;
 }
 
-/* Style the name inital icon */
-.icon {
+/* The user's initials on the top right of the screen */
+.initials {
     width: 65px;
     height: 65px; 
     background-color: rgb(59, 82, 73); 
@@ -36,10 +36,16 @@ body {
     margin-right: 15px; 
 }
 
-/* Style the user name */
+/* the user's full name on the top right of the screen */
 .name {
     color: black; 
     font-size: 25px;
+}
+
+/* Hide the password reset form */
+.pass-reset {
+    display: none;
+    margin-top: 15px;
 }
 
 /* Style the navigation bar */
@@ -133,12 +139,14 @@ body {
     overflow-y: auto;  /* Enable vertical scroll if content exceeds max-height */
 }
 
+/* Style the course display list */
 .course-list {
     max-height: 150px; /* Controls height for the course list */
     overflow-y: auto;  /* Enables vertical scrolling when there are many courses */
     padding: 10px;
 }
 
+/* Style each course section in the course list */
 .course-item {
     background-color: rgb(220, 220, 220);
     margin: 10px 0;
@@ -147,20 +155,24 @@ body {
     transition: background-color 0.3s ease;
 }
 
+/* Change the color of the course when hover */
 .course-item:hover {
     background-color: rgb(200, 200, 200);
 }
+
 
 /* Optional scroll bar */
 .course-list::-webkit-scrollbar {
     width: 8px;
 }
 
+/* Style the scroll bar */
 .course-list::-webkit-scrollbar-thumb {
     background-color: rgb(59, 82, 73);
     border-radius: 4px;
 }
 
+/* Style the scroll bar */
 .course-list::-webkit-scrollbar-track {
     background-color: rgb(220, 220, 220);
 }
