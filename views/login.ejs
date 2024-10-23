@@ -1,0 +1,47 @@
+
+<!-- views/login.ejs -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Course Registration System</title>
+    <link rel="stylesheet" href="/css/login-style.css">
+    
+</head>
+<body>
+    <div class="login-container">
+        <h1 id="welcome-header">Welcome!</h1>
+        
+        <% if (locals.error) { %>
+            <div class="error-message">
+                <%= error %>
+            </div>
+        <% } %>
+        
+        <form action="/login" method="POST">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input 
+                    id="username" 
+                    type="text" 
+                    name="username" 
+                    required
+                    autocomplete="username"
+                >
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input 
+                    id="password" 
+                    type="password" 
+                    name="password" 
+                    required
+                    autocomplete="current-password"
+                >
+            </div>
+            
+            <button id="login-button" type="submit">Login</button>
+        </form>
+    </div>
+</body>
+</html>

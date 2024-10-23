@@ -1,0 +1,44 @@
+
+
+<header class="header">
+    <h1 class="dashboard-title">Dashboard</h1>
+    <div class="profile">
+        <div class="profile-icon"><%= user.username.substring(0, 2).toUpperCase() %></div>
+        <span><%= user.username %></span>
+    </div>
+    <link rel="stylesheet" href="/css/teacher-style.css">
+    
+</header>
+
+<div class="courses-container">
+    <h2 class="courses-title">My Courses</h2>
+    <div class="courses-list">
+        <% if (locals.courses && courses.length > 0) { %>
+            <% courses.forEach(course => { %>
+                <div class="course-card">
+                    <div class="course-header">
+                        <h3 class="course-code"><%= course.name %></h3>
+                    </div>
+                    
+                    <p class="course-description"><%= course.description %></p>
+                    <div class="enrollment-date">
+                        Capacity: <%= course.current_enrollment %>/<%= course.max_capacity %>
+                    </div>
+                    <div class="course-actions">
+                        <a href="/teacher/courses/<%= course.id %>/students" class="action-button">View Students</a>
+                        <form action="/teacher/courses/<%= course.id %>/status" method="POST" style="display: inline;">
+                            <input type="hidden" name="status" value="<%= course.status === 'active' ? 'inactive' : 'active' %>">
+                            <button type="submit" class="status-toggle">
+                                <%= course.status === 'active' ? 'Deactivate Course' : 'Activate Course' %>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="course-card">
+                <p class="course-description">No courses created yet.</p>
+            </div>
+        <% } %>
+    </div>
+</div>
