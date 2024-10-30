@@ -71,11 +71,12 @@ module.exports = db = {
         console.log("Entered update password mysql");
         const client = await pool.connect();
         try {
-            const sql = `UPDATE users SET password = $1 WHERE username = $2`;
+            const sql = `UPDATE users SET password_ = $1 WHERE username = $2`;
             await client.query(sql, [newPassword, username]);
         } finally {
             client.release();
         }
     }
+};
 };
 
