@@ -1,77 +1,81 @@
 //mysql-service.js(backend)
-const mysql = require('mysql2/promise'); // Use mysql2 with promises
+const { Pool } = require("pg");
+
+
+
+const pool = new Pool({
+    host: "ep-green-tree-a5jwyvca.us-east-2.aws.neon.tech",
+    user: "R.A.D Registration Database_owner", 
+    password: "2pDCquHOtlX4", 
+    database: "R.A.D Registration Database",
+    port: 5432,
+    ssl: { rejectUnauthorized: false }
+});
 
 module.exports = db = {
-    mydb: {
-        host: "localhost",
-        user: "root", 
-        password: "", 
-        database: "r.a.d-registration-database",
-    },
-
-    // Method to select all rows from a table
     selectAll: async function (tableName) {
-        const connection = await mysql.createConnection(this.mydb);
+        const client = await pool.connect();
         try {
-            const [results] = await connection.execute(`SELECT * FROM ${tableName}`);
-            return results;
+            const results = await client.query(`SELECT * FROM ${tableName}`);
+            return results.rows;
         } finally {
-            await connection.end(); // Close the connection after query execution
+            client.release(); // Release connection after use
         }
     },
 
-    // Method to get one record based on name, password, and role
     getOne: async function (tableName, username, password, user_role) {
         console.log("Inside getOne")
-        const connection = await mysql.createConnection(this.mydb);
+        const client = await pool.connect();
         console.log("After connection");
         try {
             console.log("Entered try");
-            const sql = `SELECT * FROM ${tableName} WHERE username = "${username}" AND password = "${password}" AND user_role = "${user_role}"`;
-            const [results] = await connection.execute(sql, [tableName, username, password, user_role]);
-            console.log("Rows evaluated", results);
-            return results[0]; // Return the first matching user, if any
+            //console.log("Username:", username, "Password:", password, "user_role:", user_role);
+            const sql = `SELECT * FROM ${tableName} WHERE username = $1 AND password_ = $2 AND user_role = $3`;
+            const results = await client.query(sql, [username, password, user_role]);
+            console.log("Rows evaluated:", results.rows[0]);
+            return results.rows[0];
         } catch (error) {
-            console.error("Error executing query:", error);
-            throw error; // Rethrow error to handle in the calling function
+            console.error("Query execution error:", error);
+            throw error;
         } finally {
-            await connection.end();
+            client.release();
         }
     },
 
-    // Method to add a new user to the table
     addOne: async function (tableName, user) {
-        const connection = await mysql.createConnection(this.mydb);
+        const client = await pool.connect();
         try {
-            const sql = `INSERT INTO ?? (name, address, password, role) VALUES (?, ?, ?, ?)`;
-            const [results] = await connection.execute(sql, [tableName, user.name, user.address, user.password, user.role]);
-            return results;
+            const sql = `INSERT INTO ${tableName} (name, address, password, role) VALUES ($1, $2, $3, $4) RETURNING *`;
+            const results = await client.query(sql, [user.name, user.address, user.password, user.role]);
+            return results.rows[0];
         } finally {
-            await connection.end(); // Close the connection after query execution
+            client.release();
         }
     },
 
-    // Fetch a user by username
     getUserByUsername: async function(username) {
-        const connection = await mysql.createConnection(this.mydb);
         console.log("Connected to getUserbyUsername");
+        const client = await pool.connect();
         try {
-            const [rows] = await connection.query(`SELECT firstname, last_name, password FROM users WHERE username = "${username}"`);
-            console.log("After username is processed in database: ", rows[0]);
-            return rows[0];
+            //console.log("Entered try, username: ", username);
+            const sql = `SELECT first_name, last_name, password_ FROM users WHERE username = $1`;
+            const results = await client.query(sql, [username]);
+            //console.log("After username is processed in database: ", results.rows[0]);
+            return results.rows[0];
         } finally {
-            connection.end();
+            client.release();
         }
     },
 
-    // Change a user's password after authenticating them
     updateUserPassword: async function(username, newPassword) {
         console.log("Entered update password mysql");
-        const connection = await mysql.createConnection(this.mydb);
+        const client = await pool.connect();
         try {
-            await connection.query(`UPDATE users SET password = "${newPassword}" WHERE username = "${username}"`);
+            const sql = `UPDATE users SET password = $1 WHERE username = $2`;
+            await client.query(sql, [newPassword, username]);
         } finally {
-            connection.end();
+            client.release();
         }
     }
 };
+
