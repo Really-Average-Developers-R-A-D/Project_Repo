@@ -3,7 +3,7 @@ const jwt = require("jwt-simple");
 const router = require("express").Router();
 const secret = "supersecret"; // for encoding/decoding JWT
 const db = require("./mysql-service"); // Use mysql-services.js instead of pg-services
-console.log("api-users.js");
+//console.log("api-users.js");
 
 
 // Send a token when given valid username/password/role
@@ -37,17 +37,17 @@ router.post("/auth", async function(req, res) {
 
 // Check token and return users' data
 router.get("/status", async function(req, res) {
-    console.log("Entered the get");
+    //console.log("Entered the get");
     if (!req.headers["x-auth"]) {
         return res.status(401).json({ error: "Missing X-Auth headers" });
     }
 
     const token = req.headers["x-auth"];
-    console.log("Read the token");
+    //console.log("Read the token");
     try {
-        console.log("entered try");
+        //console.log("entered try");
         const decoded = jwt.decode(token, secret);
-        console.log("Entering database");
+        //console.log("Entering database");
         const users = await db.selectAll("users");
         res.json(users);
     } catch (ex) {
@@ -71,12 +71,14 @@ router.get("/user-details", async (req, res) => {
         const username = decoded.username; 
 
         // Fetch user details from the database
+        //console.log("About to enter getUsersbyUsername");
         const user = await db.getUserByUsername(username);
+        //console.log("user.first_name: ", user.first_name, "user.last_name: ", user.last_name);
 
         if (user) {
             // Send the user details in the response
             return res.json({
-                firstName: user.firstname, 
+                firstName: user.first_name, 
                 lastName: user.last_name
             });
         } else {
@@ -94,12 +96,16 @@ router.get("/user-details", async (req, res) => {
 //Validates the user token to proceed with changing password
 router.post("/change-password", async (req, res) => {
     const authHeader = req.headers.authorization;
+    //console.log("Entered POST: /change-password");
 
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
     }
 
+    //console.log("About to split token");
     const token = authHeader.split(" ")[1];
+
+    //console.log("About to decode token");
     const decoded = jwt.decode(token, secret); 
 
     const { oldPassword, newPassword } = req.body;
@@ -108,9 +114,10 @@ router.post("/change-password", async (req, res) => {
         // Fetch user by username
         //console.log("Entered try for old pass");
         const user = await db.getUserByUsername(decoded.username);
+        //console.log("Old password: ", oldPassword);
         
         // Check if the old password matches
-        if (user.password !== oldPassword) {
+        if (user.password_ !== oldPassword) {
             return res.status(400).json({ error: "Incorrect current password" });
         }
         //console.log("About to update the database with values:", decoded.username, newPassword);
