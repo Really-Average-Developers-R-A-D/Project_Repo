@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ oldPassword, newPassword })
             });
-            console.log("response from name change:", response);
+            //console.log("response from name change:", response);
             const result = await response.json();
             if (response.ok) {
                 document.getElementById("changePasswordSuccess").textContent = "Password changed successfully!";
@@ -89,3 +89,61 @@ function resetPass() {
     passReset.style.display = 'block';
     //message.innerHTML = "";
 }
+
+// Function to close the password reset popup
+document.querySelector(".pass-reset .close").addEventListener("click", () => {
+    document.getElementById("pass-reset").style.display = "none";
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+    // Fetch user details for the header
+    console.log("StudentPage.js getting courses") 
+    try {
+        const token = localStorage.getItem("token");
+        const userResponse = await fetch("http://localhost:3000/api/user-details", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+        console.log("Token:", token);
+
+        if (userResponse.ok) {
+            const userData = await userResponse.json();
+            console.log("Checking the response");
+            document.getElementById("user-name").textContent = `${userData.firstName} ${userData.lastName}`;
+            document.getElementById("user-initials").textContent = `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`;
+            console.log("Response success");
+        } else {
+            console.error("Failed to fetch user details");
+        }
+    } catch (error) {
+        console.error("Error fetching user details:", error);
+    }
+
+    // Fetch courses for the student
+    try {
+        console.log("Getting courses for the student");
+        const courseResponse = await fetch("http://localhost:3000/api/student-courses", {
+            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+        });
+        if (courseResponse.ok) {
+            const courses = await courseResponse.json();
+            const courseList = document.querySelector(".course-list");
+            courseList.innerHTML = ""; // Clear any static content
+            console.log("Here are the courses");
+            // Add each course to the course list
+            courses.forEach(course => {
+                const courseItem = document.createElement("div");
+                courseItem.classList.add("course-item");
+                courseItem.textContent = `${course.course_name}: ${course.description}`;
+                courseList.appendChild(courseItem);
+            });
+        } else {
+            console.error("Failed to fetch courses");
+        }
+    } catch (error) {
+        console.error("Error fetching courses:", error);
+    }
+});
