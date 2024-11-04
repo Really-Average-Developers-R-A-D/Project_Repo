@@ -42,10 +42,72 @@ body {
     font-size: 25px;
 }
 
-/* Hide the password reset form */
+/* Hide the password reset form and design it*/
 .pass-reset {
-    display: none;
-    margin-top: 15px;
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(190, 197, 173);
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Style the close button for the change password window */
+.pass-reset .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #333;
+}
+
+/* Make the text boxes look nice for old and new password */
+.pass-reset input {
+    width: 95%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Makes the "Old Password" and "New Password" texts bold */
+.pass-reset label {
+    font-weight: bold;
+}
+
+/* Center the change password button */
+.pass-change-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Full width of the parent */
+    margin-top: 20px; /* Adjust margin as needed */
+}
+
+/* Style the change password button */
+#passChange {
+    text-align: center;
+    color: black;
+    background-color: rgb(164, 180, 148);
+    padding: 10px 20px;
+    border: none;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Add hover effect to change password button */
+#passChange:hover {
+    background-color: rgb(140, 160, 125); 
 }
 
 /* Style the navigation bar */
