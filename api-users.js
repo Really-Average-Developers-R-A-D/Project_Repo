@@ -131,4 +131,47 @@ router.post("/change-password", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+
+// Route to get the courses for the logged-in student
+router.get("/student-courses", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    console.log("Entered GET student courses");
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        console.log("Entered Try");
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const username = decoded.username; 
+        console.log("Decoded username:", username);
+
+        // Fetch the user details to get their user ID (you might need to adjust this depending on your database structure)
+        const user = await db.getUserByUsername(username);
+        console.log("Returned from database");
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Assuming `user.user_id` is available as the unique identifier for courses
+        const sql = `
+            SELECT c.course_name, c.description 
+            FROM courses c
+            JOIN registered r ON c.course_id = r.course_id
+            WHERE r.user_id = $1
+        `;
+        console.log("After query");
+        const client = await db.pool.connect(); // Assuming `pool` is your PostgreSQL connection pool
+        console.log("Connection established, userID:", user.user_id);
+        const result = await client.query(sql, [user.user_id]);
+        console.log("Sent result");
+        client.release();
+        console.log("Result.rows:", result.rows);
+        res.json(result.rows);
+    } catch (error) {
+        console.error("Error fetching student courses:", error);
+        res.status(500).json({ error: "Failed to fetch courses" });
+    }
+});
 module.exports = router;
