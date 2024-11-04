@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ oldPassword, newPassword })
             });
-            console.log("response from name change:", response);
+            //console.log("response from name change:", response);
             const result = await response.json();
             if (response.ok) {
                 document.getElementById("changePasswordSuccess").textContent = "Password changed successfully!";
@@ -88,3 +88,8 @@ function resetPass() {
     passReset.style.display = 'block';
     //message.innerHTML = "";
 }
+
+// Function to close the password reset popup
+document.querySelector(".pass-reset .close").addEventListener("click", () => {
+    document.getElementById("pass-reset").style.display = "none";
+});
