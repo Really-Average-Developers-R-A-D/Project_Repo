@@ -83,13 +83,17 @@
                 <div id="pass-reset" class="pass-reset">
                     <span class="close">&times;</span>
                     <form id="changePasswordForm">
-                        <label for="oldPassword">Current Password:</label>
-                        <input type="password" id="oldPassword" name="oldPassword" required>
-                            
-                        <label for="newPassword">New Password:</label>
-                        <input type="password" id="newPassword" name="newPassword" required>
-                
-                        <button type="submit">Change Password</button>
+                        <div class = "changeOldPassword">
+                            <label for="oldPassword">Current Password:</label>
+                            <input type="password" id="oldPassword" name="oldPassword" required>
+                        </div>
+                        <div class="updateNewPassword">
+                            <label for="newPassword">New Password:</label>
+                            <input type="password" id="newPassword" name="newPassword" required>
+                        </div>
+                        <div class="pass-change-container">
+                            <button id="passChange" type="submit">Change Password</button>
+                        </div>
                     </form>
 
                     <!--Change color of text depending on success or fail-->
