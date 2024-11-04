@@ -1,4 +1,5 @@
 //mysql-service.js(backend)
+//const mysql = require('mysql2/promise'); // Use mysql2 with promises
 const { Pool } = require("pg");
 
 
@@ -13,6 +14,7 @@ const pool = new Pool({
 });
 
 module.exports = db = {
+    pool,
     selectAll: async function (tableName) {
         const client = await pool.connect();
         try {
@@ -24,15 +26,15 @@ module.exports = db = {
     },
 
     getOne: async function (tableName, username, password, user_role) {
-        console.log("Inside getOne")
+        //console.log("Inside getOne")
         const client = await pool.connect();
-        console.log("After connection");
+        //console.log("After connection");
         try {
-            console.log("Entered try");
+            //console.log("Entered try");
             //console.log("Username:", username, "Password:", password, "user_role:", user_role);
             const sql = `SELECT * FROM ${tableName} WHERE username = $1 AND password_ = $2 AND user_role = $3`;
             const results = await client.query(sql, [username, password, user_role]);
-            console.log("Rows evaluated:", results.rows[0]);
+            //console.log("Rows evaluated:", results.rows[0]);
             return results.rows[0];
         } catch (error) {
             console.error("Query execution error:", error);
@@ -54,11 +56,11 @@ module.exports = db = {
     },
 
     getUserByUsername: async function(username) {
-        console.log("Connected to getUserbyUsername");
+        //console.log("Connected to getUserbyUsername");
         const client = await pool.connect();
         try {
             //console.log("Entered try, username: ", username);
-            const sql = `SELECT first_name, last_name, password_ FROM users WHERE username = $1`;
+            const sql = `SELECT first_name, last_name, password_, user_id FROM users WHERE username = $1`;
             const results = await client.query(sql, [username]);
             //console.log("After username is processed in database: ", results.rows[0]);
             return results.rows[0];
@@ -68,7 +70,7 @@ module.exports = db = {
     },
 
     updateUserPassword: async function(username, newPassword) {
-        console.log("Entered update password mysql");
+        //console.log("Entered update password mysql");
         const client = await pool.connect();
         try {
             const sql = `UPDATE users SET password_ = $1 WHERE username = $2`;
