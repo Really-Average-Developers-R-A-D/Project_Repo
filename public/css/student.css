@@ -213,10 +213,18 @@ body {
 /* Style each course section in the course list */
 .course-item {
     background-color: rgb(220, 220, 220);
+    display: flex;
+    flex-direction: column;
     margin: 10px 0;
     padding: 15px;
     border-radius: 5px;
     transition: background-color 0.3s ease;
+}
+
+.course-item-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
 }
 
 /* Change the color of the course when hover */

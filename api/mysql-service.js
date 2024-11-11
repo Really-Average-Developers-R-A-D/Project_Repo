@@ -78,6 +78,27 @@ module.exports = db = {
         } finally {
             client.release();
         }
+    },
+
+    getCoursesByAvailability: async function() {
+        const client = await pool.connect();
+        try {
+            //const sql = `SELECT course_id, course_name, description, max_capacity, current_enrollment
+            //FROM courses
+            //WHERE current_enrollment < max_capacity`;
+
+            const sql = `
+            SELECT m.major_name, c.course_id, c.course_name, c.description, c.current_enrollment, c.max_capacity
+            FROM courses c
+            JOIN course_major cm ON c.course_id = cm.course_id
+            JOIN majors m ON cm.major_id = m.major_id
+            WHERE c.current_enrollment < c.max_capacity
+        `;
+            const result = await client.query(sql);
+            return result.rows;
+        } finally {
+            client.release();
+        }
     }
 };
 

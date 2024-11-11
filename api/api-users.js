@@ -154,13 +154,16 @@ router.get("/student-courses", async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Assuming `user.user_id` is available as the unique identifier for courses
+        // Query to get course details of the student
         const sql = `
-            SELECT c.course_name, c.description 
+        SELECT m.major_name, c.course_id, c.course_name, c.description, 
+            TO_CHAR(r.register_date, 'YYYY-MM-DD') AS register_date
             FROM courses c
             JOIN registered r ON c.course_id = r.course_id
+            JOIN course_major cm ON c.course_id = cm.course_id
+            JOIN majors m ON cm.major_id = m.major_id
             WHERE r.user_id = $1
-        `;
+    `   ;
         console.log("After query");
         const client = await db.pool.connect(); // Assuming `pool` is your PostgreSQL connection pool
         console.log("Connection established, userID:", user.user_id);
@@ -172,6 +175,17 @@ router.get("/student-courses", async (req, res) => {
     } catch (error) {
         console.error("Error fetching student courses:", error);
         res.status(500).json({ error: "Failed to fetch courses" });
+    }
+});
+
+router.get('/available-courses', async (req, res) => {
+    try {
+        const result = await db.getCoursesByAvailability();
+        console.log(result);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching available courses:', error);
+        res.status(500).send('Error fetching available courses');
     }
 });
 module.exports = router;
