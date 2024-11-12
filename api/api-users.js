@@ -1,41 +1,36 @@
+
 //api-users.js
 const jwt = require("jwt-simple");
 const router = require("express").Router();
 const secret = "supersecret"; // for encoding/decoding JWT
-const db = require("./mysql-service"); // Use mysql-services.js instead of pg-services
-//console.log("api-users.js");
+const db = require("./mysql-service"); 
 
 
 // Send a token when given valid username/password/role
 router.post("/auth", async function(req, res) {
-    /*console.log("Received POST request:", req.body); // Log request body
-    console.log("Username:", req.body.username);
-    console.log("Password:", req.body.password);
-    console.log("User Role:", req.body.user_role);
-*/
+
+    // Error if an input is missing
     if (!req.body.username || !req.body.password || !req.body.user_role) {
         res.status(401).json({ error: "Missing username, password, and/or role" });
         return;
     }
+
+    // Search the database for the matching username, password, and role
     try {
-        //console.log("inside api-users try");
         const user = await db.getOne("users", req.body.username, req.body.password, req.body.user_role);
-        //console.log("inside api-users try 2");
+        
         if (!user) {
-            //console.log("inside api-users try if");
             res.status(401).json({ error: "Bad username and/or password" });
         } else {
-            //console.log("inside api-users try else");
             const token = jwt.encode({ username: user.username, role: user.user_role }, secret);
-            res.json({ token: token });
-            //console.log("Done POST");
+            res.json({ token: token });    
         }
     } catch (error) {
         res.status(500).json({ error: "Database connection failed" });
     }
 });
 
-// Check token and return users' data
+// Check token and return users' data (Currently unused)
 router.get("/status", async function(req, res) {
     //console.log("Entered the get");
     if (!req.headers["x-auth"]) {
@@ -57,23 +52,21 @@ router.get("/status", async function(req, res) {
 
 // Fetch user details based on the token
 router.get("/user-details", async (req, res) => {
-    //console.log("Entered GET try");
-    const authHeader = req.headers.authorization;
 
+    const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
     }
 
+    // Decode token to extract user details such as first name and last name
     try {
-        const token = authHeader.split(" ")[1]; // Extract token after 'Bearer'
+        const token = authHeader.split(" ")[1]; 
         const decoded = jwt.decode(token, secret);
 
         const username = decoded.username; 
 
         // Fetch user details from the database
-        //console.log("About to enter getUsersbyUsername");
         const user = await db.getUserByUsername(username);
-        //console.log("user.first_name: ", user.first_name, "user.last_name: ", user.last_name);
 
         if (user) {
             // Send the user details in the response
@@ -82,48 +75,41 @@ router.get("/user-details", async (req, res) => {
                 lastName: user.last_name
             });
         } else {
-            // Send a 404 error if the user isn't found
             return res.status(404).json({ error: "User not found" });
         }
 
     } catch (error) {
-        console.error("Error during GET /user-details:", error);
         // Ensure only one response is sent
+        console.error("Error during GET /user-details:", error);
         return res.status(401).json({ error: "Unauthorized" });
     }
 });
 
-//Validates the user token to proceed with changing password
+// Validates the user token to proceed with changing password
 router.post("/change-password", async (req, res) => {
+    
     const authHeader = req.headers.authorization;
-    //console.log("Entered POST: /change-password");
-
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
     }
 
-    //console.log("About to split token");
+    // Decode the token
     const token = authHeader.split(" ")[1];
-
-    //console.log("About to decode token");
     const decoded = jwt.decode(token, secret); 
 
     const { oldPassword, newPassword } = req.body;
 
+    // Find the user in the database and proceed to change password
     try {
-        // Fetch user by username
-        //console.log("Entered try for old pass");
         const user = await db.getUserByUsername(decoded.username);
-        //console.log("Old password: ", oldPassword);
         
         // Check if the old password matches
         if (user.password_ !== oldPassword) {
             return res.status(400).json({ error: "Incorrect current password" });
         }
-        //console.log("About to update the database with values:", decoded.username, newPassword);
+
         // Update password in the database
         await db.updateUserPassword(decoded.username, newPassword);
-        //console.log("decoded username and new password:", decoded.username, newPassword);
 
         res.json({ message: "Password updated successfully" });
     } catch (error) {
@@ -132,56 +118,42 @@ router.post("/change-password", async (req, res) => {
     }
 });
 
-// Route to get the courses for the logged-in student
+// Route to get the enrolled courses for the logged-in student
 router.get("/student-courses", async (req, res) => {
+
     const authHeader = req.headers.authorization;
-    console.log("Entered GET student courses");
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
     }
 
+    // Find the user by username in the database before running a query to get all the user's enrolled classes
     try {
-        console.log("Entered Try");
+        
+        // Decode token
         const token = authHeader.split(" ")[1];
         const decoded = jwt.decode(token, secret);
         const username = decoded.username; 
-        console.log("Decoded username:", username);
 
-        // Fetch the user details to get their user ID (you might need to adjust this depending on your database structure)
+        // Fetch the user details from the database
         const user = await db.getUserByUsername(username);
-        console.log("Returned from database");
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
 
         // Query to get course details of the student
-        const sql = `
-        SELECT m.major_name, c.course_id, c.course_name, c.description, 
-            TO_CHAR(r.register_date, 'YYYY-MM-DD') AS register_date
-            FROM courses c
-            JOIN registered r ON c.course_id = r.course_id
-            JOIN course_major cm ON c.course_id = cm.course_id
-            JOIN majors m ON cm.major_id = m.major_id
-            WHERE r.user_id = $1
-    `   ;
-        console.log("After query");
-        const client = await db.pool.connect(); // Assuming `pool` is your PostgreSQL connection pool
-        console.log("Connection established, userID:", user.user_id);
-        const result = await client.query(sql, [user.user_id]);
-        console.log("Sent result");
-        client.release();
-        console.log("Result.rows:", result.rows);
-        res.json(result.rows);
+        const result = await db.getCoursesByEnrollment(username);
+        res.json(result);
     } catch (error) {
         console.error("Error fetching student courses:", error);
         res.status(500).json({ error: "Failed to fetch courses" });
     }
 });
 
+// Route to get available courses for the student
 router.get('/available-courses', async (req, res) => {
     try {
+        //Query to get available courses
         const result = await db.getCoursesByAvailability();
-        console.log(result);
         res.json(result);
     } catch (error) {
         console.error('Error fetching available courses:', error);

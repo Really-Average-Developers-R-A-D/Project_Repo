@@ -10,13 +10,11 @@ document.querySelector("#loginBtn").addEventListener("click", async function() {
     login(username, password, role);
 });
 
-//This function updates the user's role based off the user's selection
+// This function updates the user's role based off the user's selection
 function selectRole(button) {
-    // Remove the active status from all buttons
+    // Remove the active status from all buttons, changing the color of the selected role
     let buttons = document.querySelectorAll('#role-button');
     buttons.forEach(btn => btn.classList.remove('active'));
-
-    // Add the active status to user-selected button so it can be highlighted
     button.classList.add('active');
 
     // Get the selected role of the user
@@ -25,15 +23,11 @@ function selectRole(button) {
 
 // This function authenticates the user and sends inputs to the backend
 async function login(username, password, role) {
-    /*console.log("About to run POST");
-    console.log("Username:", username);
-    console.log("Password:", password);
-    console.log("User Role:", role);
-    */
+
     const response = await fetch("http://localhost:3000/api/auth", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json" // Changed to application/json
+            "Content-Type": "application/json" 
         },
         body: JSON.stringify({
             username: username, 
@@ -44,9 +38,8 @@ async function login(username, password, role) {
     });
     
     const loginStatus = document.querySelector("#errorMsg");
-    //console.log("Response recieved: ", response);
  
-    // Authenticate the user's credentials, otherwise display error message 
+    // Authenticate the user's credentials 
     if (response.ok) {
         const tokenResponse = await response.json();
         localStorage.setItem("token", tokenResponse.token);
@@ -63,7 +56,6 @@ async function login(username, password, role) {
         loginStatus.innerHTML = `Login failed. Try again`;
         loginStatus.className = 'error';
     }
-    //console.log("login.js");
     clearForm();
 }
 
@@ -80,7 +72,6 @@ function resetPassForm() {
     const divider = document.querySelector("#divider");
     divider.style.display = 'block';
     emailReset.style.display = 'block';
-    //message.innerHTML = "";
 }
 
 // This function validates a user's email address and sends password reset instructions
