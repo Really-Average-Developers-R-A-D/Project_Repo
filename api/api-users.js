@@ -22,7 +22,7 @@ router.post("/auth", async function(req, res) {
         if (!user) {
             res.status(401).json({ error: "Bad username and/or password" });
         } else {
-            const token = jwt.encode({ username: user.username, role: user.user_role }, secret);
+            const token = jwt.encode({ username: user.username, role: user.user_role, user_id: user.user_id }, secret);
             res.json({ token: token });    
         }
     } catch (error) {
@@ -151,13 +151,116 @@ router.get("/student-courses", async (req, res) => {
 
 // Route to get available courses for the student
 router.get('/available-courses', async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
     try {
         //Query to get available courses
-        const result = await db.getCoursesByAvailability();
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id; 
+        const result = await db.getCoursesByAvailability(userId);
         res.json(result);
     } catch (error) {
         console.error('Error fetching available courses:', error);
         res.status(500).send('Error fetching available courses');
     }
 });
+
+// Route to register a student for a course
+router.post("/register-course/:courseId", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id; // Fix this problem, user_id is null
+        const courseId = req.params.courseId;
+
+        const result = await db.registerStudentForCourse(userId, courseId);
+        res.json({ message: "Successfully registered for the course" });
+    } catch (error) {
+        console.error("Error during course registration:", error);
+        res.status(500).json({ error: "Failed to register for course" });
+    }
+});
+
+// Route to drop a course
+router.post("/drop-course/:courseId", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id;
+        const courseId = req.params.courseId;
+
+        await db.updateCourseStatus(userId, courseId);
+        res.json({ message: "Successfully dropped the course" });
+    } catch (error) {
+        console.error("Error dropping course:", error);
+        res.status(500).json({ error: "Failed to drop course" });
+    }
+});
+
+// Route to get dropped courses for the logged-in student
+router.get("/dropped-courses", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id;
+
+        const result = await db.getDroppedCourses(userId);
+        res.json(result);
+    } catch (error) {
+        console.error("Error fetching dropped courses:", error);
+        res.status(500).json({ error: "Failed to fetch dropped courses" });
+    }
+});
+
+// Route to get list of all majors
+router.get("/majors", async (req, res) => {
+    try {
+        const majors = await db.getMajors();
+        res.json(majors);
+    } catch (error) {
+        console.error("Error fetching majors:", error);
+        res.status(500).json({ error: "Failed to fetch majors" });
+    }
+});
+
+// Route to set/update user's major
+router.post("/set-major", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id;
+        const { major_id } = req.body;
+
+        const result = await db.setOrUpdateMajor(userId, major_id);
+
+        res.json({ message: "Major successfully set/updated" });
+    } catch (error) {
+        console.error("Error setting/updating major:", error);
+        res.status(500).json({ error: "Failed to set/update major" });
+    }
+});
+
 module.exports = router;

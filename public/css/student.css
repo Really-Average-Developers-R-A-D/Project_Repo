@@ -226,6 +226,35 @@ body {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
+    align-items: center;
+    position: relative;
+}
+
+/* Position the course ID text */
+.course-id-name {
+    flex-grow: 1;
+}
+
+/* Position the register-date */
+.course-register-date {
+    margin-left: 10px;
+}
+
+/* Position and style the register button */
+.register-button {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    text-align: center;
+    color: black;
+    background-color: rgb(164, 180, 148);
+    padding: 10px 20px;
+    border: none;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
 /* Change the color of the course when hover */
@@ -247,4 +276,62 @@ body {
 /* Style the scroll bar */
 .course-list::-webkit-scrollbar-track {
     background-color: rgb(220, 220, 220);
+}
+
+/* Style the drop button for dropping a course */
+.drop-button {
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    text-align: center;
+    color: black;
+    background-color: rgb(164, 180, 148);
+    padding: 10px 20px;
+    border: none;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4); 
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* Modal styling for set major form */
+.modal {
+    display: none; 
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(190, 197, 173);
+    padding: 20px;
+    border: 2px solid #333;
+    border-radius: 10px;
+    z-index: 1000;
+    width: 300px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* Style the content for the set major form*/
+.modal-content {
+    background-color: #fff;
+    margin: 5% auto; 
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; 
+}
+
+/* Style the close button in the modal*/
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Add hover effect over the close button in the modal */
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
 }
