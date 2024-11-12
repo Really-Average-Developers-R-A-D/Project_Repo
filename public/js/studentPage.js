@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // This function has the user enter their old password, validates it in the backend, then allows the user to
 // change their password and updates the password
 document.addEventListener("DOMContentLoaded", () => {
-    const changePasswordLink = document.querySelector("a[href='#']");
+    const changePasswordLink = document.getElementById("password-reset");
     const modal = document.getElementById("changePasswordModal");
     const closeModal = document.querySelector(".close");
     
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             const courses = await courseResponse.json();
             const courseList = document.querySelector(".course-list");
             courseList.innerHTML = ""; // Clear any static content
-            console.log("Here are the courses");
+
             // Add each course to the course list
             courses.forEach(course => {
                 const courseItem = document.createElement("div");
@@ -153,9 +153,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-   
-
+// Load courses available to register for    
 document.getElementById('available-courses').addEventListener('click', async () => {
+    
+    // Validate user token
     try {
         const token = localStorage.getItem("token");
         const userResponse = await fetch("http://localhost:3000/api/available-courses", {
@@ -165,7 +166,6 @@ document.getElementById('available-courses').addEventListener('click', async () 
                 "Content-Type": "application/json"
             }
         });
-        console.log("Token:", token);
     
         if (!userResponse.ok) throw new Error('Failed to fetch available courses');
         
@@ -174,10 +174,10 @@ document.getElementById('available-courses').addEventListener('click', async () 
         heading.textContent = 'Available Courses';
 
         const courses = await userResponse.json();
-        console.log("Courses: ", courses);
         const courseList = document.querySelector('.course-list');
         courseList.innerHTML = '';  // Clear previous courses
 
+        // Write each course into the course list
         courses.forEach(course => {
             const courseItem = document.createElement('div');
             courseItem.classList.add('course-item');
@@ -197,9 +197,10 @@ document.getElementById('available-courses').addEventListener('click', async () 
     }
 });
 
-// Returns to the main screen when the dashboard button is clicked
+// Returns to the home screen when the dashboard button is clicked
 document.getElementById("dashboard-button").addEventListener("click", async () => {
-    // Fetch courses for the student
+
+    // Validate the token
     try {
         const token = localStorage.getItem("token");
         const courseResponse = await fetch("http://localhost:3000/api/student-courses", {
@@ -209,19 +210,18 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
                 "Content-Type": "application/json"
             }
         });
-        console.log("dash Token:", token);
     
         if (!courseResponse.ok) throw new Error('Failed to fetch student courses');
         
-        // Change the title to available courses
+        // Change the title to my courses
         const heading = document.querySelector('.course-dashboard h2');
         heading.textContent = 'My Courses';
 
         const courses = await courseResponse.json();
-        console.log("Courses: ", courses);
         const courseList = document.querySelector('.course-list');
         courseList.innerHTML = '';  // Clear previous courses
 
+        // Write each course into the course list
         courses.forEach(course => {
             const courseItem = document.createElement("div");
             courseItem.classList.add("course-item");

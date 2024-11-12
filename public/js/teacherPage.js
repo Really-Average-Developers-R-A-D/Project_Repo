@@ -2,10 +2,9 @@
 
 // This function gets the user's firstname and lastname from the database to display on the top right of the screen
 document.addEventListener("DOMContentLoaded", async () => {
+    // Validate user token
     try {
-        console.log("inside teacherPage.js");
         const token = localStorage.getItem("token");
-        console.log("Token in local storage: ", token);
         const response = await fetch("http://localhost:3000/api/user-details", {
             method: "GET",
             headers: {
@@ -13,7 +12,8 @@ document.addEventListener("DOMContentLoaded", async () => {
                 "Content-Type": "application/json"
             }
         });
-        console.log("Response: ", response)
+
+        // Store the user details after validation
         if (response.ok) {
             const userData = await response.json();
             const firstName = userData.firstName;
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // This function has the user enter their old password, validates it in the backend, then allows the user to
 // change their password and updates the password
 document.addEventListener("DOMContentLoaded", () => {
-    const changePasswordLink = document.querySelector("a[href='#']");
+    const changePasswordLink = document.getElementById("password-reset");
     const modal = document.getElementById("changePasswordModal");
     const closeModal = document.querySelector(".close");
     
@@ -57,6 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const newPassword = document.getElementById("newPassword").value;
         const token = localStorage.getItem("token");
         
+        // Validate the token
         try {
             const response = await fetch("http://localhost:3000/api/change-password", {
                 method: "POST",
@@ -66,8 +67,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
                 body: JSON.stringify({ oldPassword, newPassword })
             });
-            //console.log("response from name change:", response);
+
             const result = await response.json();
+
+            // Display success or fail for password change
             if (response.ok) {
                 document.getElementById("changePasswordSuccess").textContent = "Password changed successfully!";
                 document.getElementById("changePasswordError").textContent = "";
@@ -86,7 +89,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function resetPass() {
     const passReset = document.querySelector("#pass-reset");
     passReset.style.display = 'block';
-    //message.innerHTML = "";
 }
 
 // Function to close the password reset popup
