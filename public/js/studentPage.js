@@ -385,20 +385,38 @@ document.getElementById('dropped-courses').addEventListener('click', async () =>
 document.getElementById('set-major-button').addEventListener('click', async () => {
     document.getElementById('set-major-form').style.display = 'block';
 
-    // Fetch list of available majors
+    // Fetch list of available majors and the student's current major
     try {
-        const response = await fetch("http://localhost:3000/api/majors", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        });
+        const [majorsResponse, currentMajorResponse] = await Promise.all([
+            fetch("http://localhost:3000/api/majors", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            }),
+            fetch("http://localhost:3000/api/current-major", {
+                method: "GET",
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+        ]);
 
-        if (!response.ok) throw new Error('Failed to fetch majors');
+        if (!majorsResponse.ok || !currentMajorResponse.ok) {
+            throw new Error('Failed to fetch majors or current major');
+        }
         
-        const majors = await response.json();
+        const majors = await majorsResponse.json();
+        const data = await currentMajorResponse.json();
         const majorSelect = document.getElementById('major-select');
         majorSelect.innerHTML = '';  // Clear previous options
+
+        if (data.currentMajor) {
+            document.getElementById("current-major").textContent = `Current Major: ${data.currentMajor}`;
+        } else {
+            document.getElementById("current-major").textContent = "No major set.";
+        }
+    
+        document.getElementById("set-major-form").style.display = "block";
 
         // Populate the dropdown with majors
         majors.forEach(major => {
@@ -413,7 +431,8 @@ document.getElementById('set-major-button').addEventListener('click', async () =
 });
 
 // Save the selected major for the user
-document.getElementById('save-major-button').addEventListener('click', async () => {
+document.getElementById('save-major-button').addEventListener('click', async (e) => {
+    e.preventDefault();
     const selectedMajorId = document.getElementById('major-select').value;
     const token = localStorage.getItem("token");
 
