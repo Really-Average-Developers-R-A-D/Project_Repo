@@ -104,6 +104,7 @@ module.exports = db = {
             client.release();
         }
     },
+
 // Get a given's teachers currently active courses
     getCoursesByTeaching: async function(username) {
         const client = await pool.connect();
@@ -125,6 +126,7 @@ module.exports = db = {
             client.release();
         }
     },
+
 
     // Get all courses that a student can register for
     getCoursesByAvailability: async function(userId) {

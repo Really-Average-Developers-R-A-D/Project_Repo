@@ -150,6 +150,7 @@ router.get("/student-courses", async (req, res) => {
 });
 
 
+
 // Route to get the courses for the logged-in teacher
 router.get("/teacher-courses", async (req, res) => {
 
@@ -180,6 +181,7 @@ router.get("/teacher-courses", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch courses" });
     }
 });
+
 
 
 

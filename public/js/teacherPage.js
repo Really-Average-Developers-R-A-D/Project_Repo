@@ -96,6 +96,7 @@ document.querySelector(".pass-reset .close").addEventListener("click", () => {
     document.getElementById("pass-reset").style.display = "none";
 });
 
+
 //Load the Teacher's courses
 document.addEventListener("DOMContentLoaded", async () => {
     // Fetch user details for the header
@@ -152,4 +153,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         console.error("Error fetching courses:", error);
     }
 });
+
 
