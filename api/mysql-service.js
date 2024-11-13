@@ -115,7 +115,7 @@ module.exports = db = {
             SELECT c.course_id, c.course_name, c.description
             FROM teaching t
             JOIN courses c ON t.course_id = c.course_id
-            JOIN course_majors cm ON   c.course_id = cm.course_id
+            JOIN course_major cm ON   c.course_id = cm.course_id
             JOIN users u ON t.user_id = u.user_id
             WHERE u.username = $1 ;
 
