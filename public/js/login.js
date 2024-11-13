@@ -50,6 +50,8 @@ async function login(username, password, role) {
                 window.location.href = 'http://127.0.0.1:5500/public/landingStudent.html';
             } else if (role == "teacher") {
                 window.location.href = 'http://127.0.0.1:5500/public/landingTeacher.html';
+            } else if (role == "administrator") {
+                window.location.href = 'http://127.0.0.1:5500/public/landingAdmin.html'
             }
         }, 1000);
     } else {
