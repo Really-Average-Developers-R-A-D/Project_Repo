@@ -160,4 +160,41 @@ router.get('/available-courses', async (req, res) => {
         res.status(500).send('Error fetching available courses');
     }
 });
+
+// Route to get list of all majors for the adminstrator
+router.get('/all-majors', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getAllMajors();
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
+// Route to get list of all students for the adminstrator
+router.get('/all-students', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getAllStudents();
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all students:', error);
+        res.status(500).send('Error fetching all students');
+    }
+});
+
+// Route to get list of all teachers for the adminstrator
+router.get('/all-majors', async (req, res) => {
+    try {
+        const result = await db.getAllMajors();
+        console.log('All Majors:', result);  // Log the result
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
 module.exports = router;

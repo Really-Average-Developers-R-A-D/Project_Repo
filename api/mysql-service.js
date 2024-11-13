@@ -4,8 +4,8 @@
 const { Pool } = require("pg");
 const pool = new Pool({
     host: "ep-green-tree-a5jwyvca.us-east-2.aws.neon.tech",
-    user: "R.A.D Registration Database_owner", 
-    password: "2pDCquHOtlX4", 
+    user: "R.A.D Registration Database_owner",
+    password: "2pDCquHOtlX4",
     database: "R.A.D Registration Database",
     port: 5432,
     ssl: { rejectUnauthorized: false }
@@ -22,7 +22,7 @@ module.exports = db = {
             const results = await client.query(`SELECT * FROM ${tableName}`);
             return results.rows;
         } finally {
-            client.release(); 
+            client.release();
         }
     },
 
@@ -56,7 +56,7 @@ module.exports = db = {
     },
 
     // Get user details by associated username
-    getUserByUsername: async function(username) {
+    getUserByUsername: async function (username) {
         const client = await pool.connect();
 
         // Find user information in the database given the username
@@ -70,7 +70,7 @@ module.exports = db = {
     },
 
     // Change the user's password in the database
-    updateUserPassword: async function(username, newPassword) {
+    updateUserPassword: async function (username, newPassword) {
         const client = await pool.connect();
 
         // Query to change given user's password
@@ -83,7 +83,7 @@ module.exports = db = {
     },
 
     // Get a given's user's currently enrolled courses
-    getCoursesByEnrollment: async function(username) {
+    getCoursesByEnrollment: async function (username) {
         const client = await pool.connect();
 
         // Query to get a given user's currently enrolled course(s)
@@ -106,7 +106,7 @@ module.exports = db = {
     },
 
     // Get all courses that a student can register for
-    getCoursesByAvailability: async function() {
+    getCoursesByAvailability: async function () {
         const client = await pool.connect();
 
         // Query gets all courses in the database where the the current enrollment has no exceeded maximum capacity
@@ -120,6 +120,23 @@ module.exports = db = {
             `;
             const result = await client.query(sql);
             return result.rows;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get all majors from the database
+    getAllMajors: async function () {
+        const client = await pool.connect();
+
+        try {
+            const sql = `SELECT major_name, descritption FROM majors;`;  // Adjust your SQL query here
+            const result = await client.query(sql);
+
+            return result.rows;  // Return all majors directly without additional filtering or transformation
+        } catch (error) {
+            console.error("Error fetching majors:", error);
+            throw error;
         } finally {
             client.release();
         }
