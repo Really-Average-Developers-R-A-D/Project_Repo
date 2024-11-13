@@ -37,12 +37,20 @@
                         <a href="#">Course Management<span class="arrow-down"></span></a>
                         <ul class="dropdown-content">
                             <li><a id="available-courses" href="#">Register for a Course</a></li>
+
+                            <li><a href="#">Drop a Course</a></li>
+                            <li><a href="#">Dropped Courses</a></li>
+                        </ul>
+
+                    <!--Shows the password reset form on the bottom, if clicked-->
+
                             <li><a id="drop-course" href="#">Drop a Course</a></li>
                             <li><a id="dropped-courses" href="#">Dropped Courses</a></li>
                             <li><a href="#" id="set-major-button">Set/Update Major</a></li>
                         </ul>
 
                     <!--Shows the password reset form, if clicked-->
+
                     <li><a href="#" id="password-reset" onclick=resetPass()>Change Password</a></li>
 
                     <!--Logs the user out and returns them to the login page-->
@@ -62,6 +70,35 @@
                         <!-- Add multiple courses for the dashboard -->
                         <div class="course-item"></div>
                     </div>
+
+                </div>
+                
+            </div>
+        </div>
+                <!--The password reset form appears on the bottom of the page-->
+                <div id="pass-reset" class="pass-reset">
+                    <span class="close">&times;</span>
+                    <form id="changePasswordForm">
+                        <div class = "changeOldPassword">
+                            <label for="oldPassword">Current Password:</label>
+                            <input type="password" id="oldPassword" name="oldPassword" required>
+                        </div>
+                        <div class="updateNewPassword">
+                            <label for="newPassword">New Password:</label>
+                            <input type="password" id="newPassword" name="newPassword" required>
+                        </div>
+                        <div class="pass-change-container">
+                            <button id="passChange" type="submit">Change Password</button>
+                        </div>
+                    </form>
+
+                    <!--Change color of text depending on success or fail-->
+                    <p id="changePasswordError" style="color: red;"></p>
+                    <p id="changePasswordSuccess" style="color: green;"></p>
+                </div>
+            </div>
+        </div>
+
                 </div>      
             </div>
         </div>

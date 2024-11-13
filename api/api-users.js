@@ -22,6 +22,7 @@ router.post("/auth", async function(req, res) {
         if (!user) {
             res.status(401).json({ error: "Bad username and/or password" });
         } else {
+            const token = jwt.encode({ username: user.username, role: user.user_role }, secret);
             const token = jwt.encode({ username: user.username, role: user.user_role, user_id: user.user_id }, secret);
             res.json({ token: token });    
         }
@@ -149,6 +150,12 @@ router.get("/student-courses", async (req, res) => {
     }
 });
 
+// Route to get available courses for the student
+router.get('/available-courses', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getCoursesByAvailability();
+
 
 
 // Route to get the courses for the logged-in teacher
@@ -197,12 +204,60 @@ router.get('/available-courses', async (req, res) => {
         const decoded = jwt.decode(token, secret);
         const userId = decoded.user_id; 
         const result = await db.getCoursesByAvailability(userId);
+
         res.json(result);
     } catch (error) {
         console.error('Error fetching available courses:', error);
         res.status(500).send('Error fetching available courses');
     }
 });
+
+
+// Route to get list of all majors for the adminstrator
+router.get('/all-majors', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getAllMajors();
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
+// Route to get list of all students for the adminstrator
+router.get('/all-students', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getAllStudents();
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all students:', error);
+        res.status(500).send('Error fetching all students');
+    }
+});
+
+// Route to get list of all teachers for the adminstrator
+router.get('/all-majors', async (req, res) => {
+    try {
+        const result = await db.getAllMajors();
+        console.log('All Majors:', result);  // Log the result
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
+// Route to get list of all teachers for the adminstrator
+router.get('/all-teachers', async (req, res) => {
+    try {
+        const result = await db.getAllMajors();
+        console.log('All Teachers:', result);  // Log the result
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
 
 // Route to register a student for a course
 router.post("/register-course/:courseId", async (req, res) => {
