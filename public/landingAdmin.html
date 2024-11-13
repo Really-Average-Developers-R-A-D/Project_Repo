@@ -56,18 +56,20 @@
         <!-- Center Page Content -->
         <div class="content" id="content">
             <h1>Dashboard</h1>
-
             <!--Displays relevant buttons for admin-->
-            <div class="admin-info">
+            <div class="admin-buttons">
                 <button id="majors-button" onclick="fetchAndDisplayMajors()">Majors</button>
-                <p> Has no functionality.</p> 
-                
+                <button id="teachers-button" onclick="fetchAndDisplayTeachers()">Teachers</button>
+                <button id="students">Students</button>
+            </div>
+            
+            <div class="admin-info">
                 <!-- Major List Section -->
-            <div class="major-list">
-                <!-- Majors will be dynamically inserted here -->
+                <div class="major-list">
+                    <!-- Majors will be dynamically inserted here -->
+                </div>
             </div>
-            </div>
-           
+
 
             <!--The password reset form appears on the bottom of the page-->
             <div id="pass-reset" class="pass-reset">

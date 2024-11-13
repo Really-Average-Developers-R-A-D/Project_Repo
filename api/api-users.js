@@ -197,4 +197,16 @@ router.get('/all-majors', async (req, res) => {
     }
 });
 
+// Route to get list of all teachers for the adminstrator
+router.get('/all-teachers', async (req, res) => {
+    try {
+        const result = await db.getAllMajors();
+        console.log('All Teachers:', result);  // Log the result
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
 module.exports = router;

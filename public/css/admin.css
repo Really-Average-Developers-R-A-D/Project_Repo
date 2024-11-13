@@ -256,9 +256,11 @@ body {
     padding: 10px;
     margin: 10px;
     background-color: gray;
+    overflow-y: auto;
+    height: 400px;
 }
 
-.admin-info button {
+.admin-buttons button {
     display: inline-block;  /* Make the text behave like a block element but still inline */
     padding: 10px 20px;
     background-color: green; /* Blue background */
@@ -270,6 +272,13 @@ body {
     transition: background-color 0.3s; /* Smooth transition for background color */
 }
 
-.admin-info button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+.admin-buttons button:hover {
+    background-color: darkgreen; /* Darker blue on hover */
+}
+
+.major-item {
+    background-color: white;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 5px;
 }

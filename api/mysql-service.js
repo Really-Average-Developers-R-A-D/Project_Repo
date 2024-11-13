@@ -128,7 +128,6 @@ module.exports = db = {
     // Get all majors from the database
     getAllMajors: async function () {
         const client = await pool.connect();
-
         try {
             const sql = `SELECT major_name, descritption FROM majors;`;  // Adjust your SQL query here
             const result = await client.query(sql);
@@ -136,6 +135,21 @@ module.exports = db = {
             return result.rows;  // Return all majors directly without additional filtering or transformation
         } catch (error) {
             console.error("Error fetching majors:", error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+    // Get all majors from the database
+    getAllTeachers: async function () {
+        const client = await pool.connect();
+        try {
+            const sql = `SELECT first_name, last_name, office FROM users WHERE user_role ='teacher';`;  // Adjust your SQL query here
+            const result = await client.query(sql);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Error fetching teacher roster:", error);
             throw error;
         } finally {
             client.release();
