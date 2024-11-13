@@ -104,6 +104,27 @@ module.exports = db = {
             client.release();
         }
     },
+// Get a given's teachers currently active courses
+    getCoursesByTeaching: async function(username) {
+        const client = await pool.connect();
+
+        // Query to get a given teachers course(s)
+        try {
+            const sql = `
+            SELECT c.course_id, c.course_name, c.description
+            FROM teaching t
+            JOIN courses c ON t.course_id = c.course_id
+            JOIN course_majors cm ON   c.course_id = cm.course_id
+            JOIN users u ON t.user_id = u.user_id
+            WHERE u.username = $1 ;
+
+        `   ;
+            const result = await client.query(sql, [username]);
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    },
 
     // Get all courses that a student can register for
     getCoursesByAvailability: async function(userId) {
