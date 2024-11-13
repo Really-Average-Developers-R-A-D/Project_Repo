@@ -1,0 +1,107 @@
+<!--landingStudent.html-->
+<!DOCTYPE HTML>
+<html lang="en">
+    <!--Basic student website information-->
+    <head>
+        <meta charset="UTF-8">
+        <title>Student Landing Page</title>
+        <link rel="stylesheet" href="css/student.css">
+    </head>
+    <body>
+        <!--Encompasses the entire visible page-->
+        <div class="container">
+
+            <!--The navigation bar on the side and top-->
+            <nav class="nav-bar">
+
+                <!--The user's initials and full name on the top right-->
+                <div class="user-info">
+                    <div class="initials">
+                        <span id="user-initials"></span>
+                    </div class="name">
+                        <span id="user-name">Loading Credentials...</span>
+                    </div>
+
+                <!--SUNY Brockport image-->
+                <div class="nav-image">
+                    <img src="images/Brockport_logo.jpg" alt="Logo">
+                </div>
+
+                <!--Navigation bar down the side providing user functionality-->
+                <ul>
+                    <!--Button to return the user to the landing page home screen-->
+                    <li><a id="dashboard-button" href="#">Dashboard</a></li>
+
+                    <!--Dropdown menu for course management with additional options for the user-->
+                    <li class="dropdown">
+                        <a href="#">Course Management<span class="arrow-down"></span></a>
+                        <ul class="dropdown-content">
+                            <li><a id="available-courses" href="#">Register for a Course</a></li>
+                            <li><a id="drop-course" href="#">Drop a Course</a></li>
+                            <li><a id="dropped-courses" href="#">Dropped Courses</a></li>
+                            <li><a href="#" id="set-major-button">Set/Update Major</a></li>
+                        </ul>
+
+                    <!--Shows the password reset form, if clicked-->
+                    <li><a href="#" id="password-reset" onclick=resetPass()>Change Password</a></li>
+
+                    <!--Logs the user out and returns them to the login page-->
+                    <li><a href="Webtest.html">Logout</a></li>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Center Page Content -->
+            <div class="content">
+                <h1>Dashboard</h1>
+
+                <!--Displays revelant information for user-->
+                <div class="course-dashboard">
+                    <h2>My Courses</h2>
+                    <div class="course-list">
+                        <!-- Add multiple courses for the dashboard -->
+                        <div class="course-item"></div>
+                    </div>
+                </div>      
+            </div>
+        </div>
+
+        <!--The password reset form appears on the page-->
+        <div id="pass-reset" class="pass-reset">
+            <span class="close">&times;</span>
+            <form id="changePasswordForm">
+                <div class = "changeOldPassword">
+                    <label for="oldPassword">Current Password:</label>
+                    <input type="password" id="oldPassword" name="oldPassword" required>
+                </div>
+                <div class="updateNewPassword">
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="pass-change-container">
+                    <button id="passChange" type="submit">Change Password</button>
+                </div>
+            </form>
+
+                <!--Change color of text depending on success or fail-->
+                <p id="changePasswordError" style="color: red;"></p>
+                <p id="changePasswordSuccess" style="color: green;"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Set Major form appears on the page -->
+    <div id="set-major-form" class="modal" style="display: none;">
+        <span class="close">&times;</span>
+        <h3>Select Your Major</h3>
+        <form id="setMajorForm">
+            <select id="major-select"></select>
+            <button id="save-major-button" type="submit">Save Major</button>
+        </form>
+        <p id="setMajorError" style="color: red;"></p>
+        <p id="setMajorSuccess" style="color: green;"></p>
+    </div>
+        <!-- External script -->
+        <script src="js/studentPage.js"></script>
+    </body>
+</html>
