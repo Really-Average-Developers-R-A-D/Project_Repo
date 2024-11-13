@@ -142,6 +142,7 @@ router.get("/student-courses", async (req, res) => {
 
         // Query to get course details of the student
         const result = await db.getCoursesByEnrollment(username);
+        console.log("Courses: ", results);
         res.json(result);
     } catch (error) {
         console.error("Error fetching student courses:", error);
@@ -175,6 +176,7 @@ router.get("/teacher-courses", async (req, res) => {
 
         // Query to get course details of the teacher
         const result = await db.getCoursesByTeaching(username);
+        console.log("All Courses: ", result);
         res.json(result);
     } catch (error) {
         console.error("Error fetching teacher courses:", error);
