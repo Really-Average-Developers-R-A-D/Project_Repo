@@ -301,4 +301,23 @@ router.post("/set-major", async (req, res) => {
     }
 });
 
+// Route to get the user's current major
+router.get("/current-major", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id;
+
+        const currentMajor = await db.getCurrentMajor(userId);
+        res.json({ currentMajor });
+    } catch (error) {
+        console.error("Error fetching current major:", error);
+        res.status(500).json({ error: "Failed to fetch current major" });
+    }
+});
 module.exports = router;

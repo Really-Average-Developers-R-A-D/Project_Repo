@@ -1,5 +1,4 @@
-
-//studentPage.js(frontend)
+//admin page coming from studentPage.js(frontend)
 
 // This function gets the user's firstname and lastname from the database to display on the top right of the screen
 document.addEventListener("DOMContentLoaded", async () => {
@@ -185,21 +184,12 @@ document.getElementById('available-courses').addEventListener('click', async () 
             <div class="course-item-header">
                 <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
                 <span class="course-register-date">Enrolled: ${course.current_enrollment} / ${course.max_capacity}</span>
-                <button class="register-button" data-course-id="${course.course_id}">Register</button>
             </div>
             <div class="course-description">
                 <p>${course.description}</p>
             </div>
         `;
             courseList.appendChild(courseItem);
-        });
-
-        // Add event listeners to all "Register" buttons
-        document.querySelectorAll('.register-button').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const courseId = event.target.getAttribute('data-course-id');
-                await registerForCourse(courseId);
-            });
         });
     } catch (error) {
         console.error(error);
@@ -222,12 +212,10 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
     
         if (!courseResponse.ok) throw new Error('Failed to fetch student courses');
         
-        // Change the title to my courses
-        const heading = document.querySelector('.course-dashboard h2');
-        heading.textContent = 'My Courses';
+       
 
         const courses = await courseResponse.json();
-        const courseList = document.querySelector('.course-list');
+        const courseList = document.querySelector('.admin-info');
         courseList.innerHTML = '';  // Clear previous courses
 
         // Write each course into the course list
@@ -250,32 +238,11 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
     }
 });
 
-// Register button validation
-async function registerForCourse(courseId) {
+// NEW STUFF
+async function fetchAndDisplayMajors() {
     try {
         const token = localStorage.getItem("token");
-        const response = await fetch(`http://localhost:3000/api/register-course/${courseId}`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) throw new Error('Failed to register for course');
-        alert('Successfully registered for the course!');
-    } catch (error) {
-        console.error("Error during registration:", error);
-    }
-}
-
-// Load enrolled courses for dropping
-document.getElementById('drop-course').addEventListener('click', async () => {
-    
-    // Validate the user
-    try {
-        const token = localStorage.getItem("token");
-        const userResponse = await fetch("http://localhost:3000/api/student-courses", {
+        const response = await fetch("http://localhost:3000/api/all-majors", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -283,185 +250,54 @@ document.getElementById('drop-course').addEventListener('click', async () => {
             }
         });
 
-        if (!userResponse.ok) throw new Error('Failed to fetch enrolled courses');
-
-        const heading = document.querySelector('.course-dashboard h2');
-        heading.textContent = 'Drop a Course';
-
-        const courses = await userResponse.json();
-        const courseList = document.querySelector('.course-list');
-        courseList.innerHTML = '';  // Clear previous courses
-
-        // Display each enrolled course with a drop button
-        courses.forEach(course => {
-            const courseItem = document.createElement('div');
-            courseItem.classList.add('course-item');
-            courseItem.innerHTML = `
-                <div class="course-item-header">
-                    <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
-                    <button class="drop-button" data-course-id="${course.course_id}">Drop</button>
-                </div>
-                <div class="course-description">
-                    <p>${course.description}</p>
-                </div>
-            `;
-            courseList.appendChild(courseItem);
-        });
-
-        // Add event listeners to all "Drop" buttons
-        document.querySelectorAll('.drop-button').forEach(button => {
-            button.addEventListener('click', async (event) => {
-                const courseId = event.target.getAttribute('data-course-id');
-                await dropCourse(courseId);
-            });
-        });
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-// Drop course function
-async function dropCourse(courseId) {
-
-    // Validate the token
-    try {
-        const token = localStorage.getItem("token");
-        const response = await fetch(`http://localhost:3000/api/drop-course/${courseId}`, {
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) throw new Error('Failed to drop course');
-        alert('Successfully dropped the course!');
-    } catch (error) {
-        console.error("Error during course drop:", error);
-    }
-}
-
-// Load dropped courses for the student
-document.getElementById('dropped-courses').addEventListener('click', async () => {
-    try {
-        const token = localStorage.getItem("token");
-        const userResponse = await fetch("http://localhost:3000/api/dropped-courses", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!userResponse.ok) throw new Error('Failed to fetch dropped courses');
-
-        const heading = document.querySelector('.course-dashboard h2');
-        heading.textContent = 'Dropped Courses';
-
-        const courses = await userResponse.json();
-        const courseList = document.querySelector('.course-list');
-        courseList.innerHTML = '';  // Clear previous courses
-
-        // Display each dropped course
-        courses.forEach(course => {
-            const courseItem = document.createElement('div');
-            courseItem.classList.add('course-item');
-            courseItem.innerHTML = `
-                <div class="course-item-header">
-                    <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
-                </div>
-                <div class="course-description">
-                    <p>${course.description}</p>
-                </div>
-            `;
-            courseList.appendChild(courseItem);
-        });
-    } catch (error) {
-        console.error(error);
-    }
-});
-
-// Display the Set/Update Major form when the button is clicked
-document.getElementById('set-major-button').addEventListener('click', async () => {
-    document.getElementById('set-major-form').style.display = 'block';
-
-    // Fetch list of available majors and the student's current major
-    try {
-        const [majorsResponse, currentMajorResponse] = await Promise.all([
-            fetch("http://localhost:3000/api/majors", {
-                method: "GET",
-                headers: { "Content-Type": "application/json" }
-            }),
-            fetch("http://localhost:3000/api/current-major", {
-                method: "GET",
-                headers: { 
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-        ]);
-
-        if (!majorsResponse.ok || !currentMajorResponse.ok) {
-            throw new Error('Failed to fetch majors or current major');
-        }
+        if (!response.ok) throw new Error('Failed to fetch majors');
         
-        const majors = await majorsResponse.json();
-        const data = await currentMajorResponse.json();
-        const majorSelect = document.getElementById('major-select');
-        majorSelect.innerHTML = '';  // Clear previous options
+        const majors = await response.json(); // Assuming backend sends JSON
+        const majorList = document.querySelector('.major-list');
+        majorList.innerHTML = '';  // Clear any previous majors
 
-        if (data.currentMajor) {
-            document.getElementById("current-major").textContent = `Current Major: ${data.currentMajor}`;
-        } else {
-            document.getElementById("current-major").textContent = "No major set.";
-        }
-    
-        document.getElementById("set-major-form").style.display = "block";
-
-        // Populate the dropdown with majors
         majors.forEach(major => {
-            const option = document.createElement('option');
-            option.value = major.major_id;
-            option.textContent = major.major_name;
-            majorSelect.appendChild(option);
+            const majorItem = document.createElement("div");
+            majorItem.classList.add("major-item");
+            majorItem.innerHTML = `
+                <h3>${major.major_name}</h3>
+                <p>${major.descritption}</p>
+            `;
+            majorList.appendChild(majorItem);
         });
     } catch (error) {
-        console.error("Error fetching majors:", error);
+        console.error("Error displaying majors:", error);
     }
-});
+}
 
-// Save the selected major for the user
-document.getElementById('save-major-button').addEventListener('click', async (e) => {
-    e.preventDefault();
-    const selectedMajorId = document.getElementById('major-select').value;
-    const token = localStorage.getItem("token");
-
-
+// NEW STUFF
+async function fetchAndDisplayTeachers() {
     try {
-        const response = await fetch("http://localhost:3000/api/set-major", {
-            method: "POST",
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:3000/api/all-teachers", {
+            method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ major_id: selectedMajorId })
+            }
         });
 
-        if (!response.ok) throw new Error('Failed to set/update major');
+        if (!response.ok) throw new Error('Failed to fetch teachers');
+        
+        const teachers = await response.json(); 
+        const teacherList = document.querySelector('.admin-info');
+        teacherList.innerHTML = ''; 
 
-        alert('Major successfully set/updated!');
-        document.getElementById('set-major-form').style.display = 'none';  // Hide the form
+        teachers.forEach(teacher => {
+            const teacherItem = document.createElement("div");
+            teacherItem.classList.add("teacher-item");
+            teacherItem.innerHTML = `
+                <h3>${teacher.first_name}</h3>
+
+            `;
+            teacherList.appendChild(teacherItem);
+        });
     } catch (error) {
-        console.error("Error setting/updating major:", error);
+        console.error("Error displaying teacher roster:", error);
     }
-});
-
-// Hide the change major modal initially
-document.getElementById('set-major-button').addEventListener('click', () => {
-    document.getElementById('set-major-form').style.display = 'block';
-});
-
-// Hide the close button in the change major modal
-document.querySelector('#set-major-form .close').addEventListener('click', () => {
-    document.getElementById('set-major-form').style.display = 'none';
-});
+}

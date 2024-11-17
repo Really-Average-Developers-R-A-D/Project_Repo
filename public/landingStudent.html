@@ -91,11 +91,15 @@
     </div>
 
     <!-- Set Major form appears on the page -->
-    <div id="set-major-form" class="modal" style="display: none;">
+    <div id="set-major-form" class="modal">
         <span class="close">&times;</span>
         <h3>Select Your Major</h3>
+        <p id="current-major">Current Major: None</p>
         <form id="setMajorForm">
-            <select id="major-select"></select>
+            <div class="dropdown-wrapper">
+                <select id="major-select"></select>
+                <span class="arrow-down-dark"></span>
+            </div>
             <button id="save-major-button" type="submit">Save Major</button>
         </form>
         <p id="setMajorError" style="color: red;"></p>

@@ -260,7 +260,24 @@ module.exports = db = {
         } finally {
             client.release();
         }
-    }
+    },
+
+    // Get the current major for a user
+    getCurrentMajor: async function(userId) {
+        const client = await pool.connect();
+        try {
+            const sql = `
+                SELECT m.major_name 
+                FROM student_majors sm
+                JOIN majors m ON sm.major_id = m.major_id
+                WHERE sm.user_id = $1
+            `;
+            const result = await client.query(sql, [userId]);
+            return result.rows[0] ? result.rows[0].major_name : null;
+        } finally {
+            client.release();
+        }
+}
 
 };
 
