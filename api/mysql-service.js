@@ -123,10 +123,10 @@ module.exports = db = {
             SELECT c.course_id, c.course_name, c.description
             FROM teaching t
             JOIN courses c ON t.course_id = c.course_id
-            JOIN course_majors cm ON   c.course_id = cm.course_id
+
+            JOIN course_major cm ON   c.course_id = cm.course_id
             JOIN users u ON t.user_id = u.user_id
             WHERE u.username = $1 ;
-
 
         `   ;
             const result = await client.query(sql, [username]);
@@ -135,6 +135,7 @@ module.exports = db = {
             client.release();
         }
     },
+
 
 
     // Get all courses that a student can register for
@@ -151,6 +152,7 @@ module.exports = db = {
             WHERE c.current_enrollment < c.max_capacity
             `;
             const result = await client.query(sql);
+
 
 
     // Get all courses that a student can register for
@@ -313,6 +315,28 @@ module.exports = db = {
         } finally {
             client.release();
         }
+
+    },
+
+    // Get the current major for a user
+    getCurrentMajor: async function(userId) {
+        const client = await pool.connect();
+        try {
+            const sql = `
+                SELECT m.major_name 
+                FROM student_majors sm
+                JOIN majors m ON sm.major_id = m.major_id
+                WHERE sm.user_id = $1
+            `;
+            const result = await client.query(sql, [userId]);
+            return result.rows[0] ? result.rows[0].major_name : null;
+        } finally {
+            client.release();
+        }
+}
+
+
     }
+
 };
 

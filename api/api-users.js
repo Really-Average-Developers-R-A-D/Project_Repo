@@ -143,12 +143,50 @@ router.get("/student-courses", async (req, res) => {
 
         // Query to get course details of the student
         const result = await db.getCoursesByEnrollment(username);
+        console.log("Courses: ", result);
         res.json(result);
     } catch (error) {
         console.error("Error fetching student courses:", error);
         res.status(500).json({ error: "Failed to fetch courses" });
     }
 });
+
+
+
+// Route to get the courses for the logged-in teacher
+router.get("/teacher-courses", async (req, res) => {
+
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    // Find the user by username in the database before running a query to get all the user's enrolled classes
+    try {
+        
+        // Decode token
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const username = decoded.username; 
+
+        // Fetch the user details from the database
+        const user = await db.getUserByUsername(username);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Query to get course details of the teacher
+        const result = await db.getCoursesByTeaching(username);
+        console.log("All Courses: ", result);
+        res.json(result);
+    } catch (error) {
+        console.error("Error fetching teacher courses:", error);
+        res.status(500).json({ error: "Failed to fetch courses" });
+    }
+});
+
+
+
 
 // Route to get available courses for the student
 router.get('/available-courses', async (req, res) => {
@@ -354,4 +392,23 @@ router.post("/set-major", async (req, res) => {
     }
 });
 
+// Route to get the user's current major
+router.get("/current-major", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id;
+
+        const currentMajor = await db.getCurrentMajor(userId);
+        res.json({ currentMajor });
+    } catch (error) {
+        console.error("Error fetching current major:", error);
+        res.status(500).json({ error: "Failed to fetch current major" });
+    }
+});
 module.exports = router;

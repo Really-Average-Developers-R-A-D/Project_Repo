@@ -289,7 +289,10 @@ async function fetchAndDisplayTeachers() {
         const teacherList = document.querySelector('.admin-info');
         teacherList.innerHTML = ''; 
 
-        teacher.forEach(teacher => {
+
+        teachers.forEach(teacher => {
+
+
             const teacherItem = document.createElement("div");
             teacherItem.classList.add("teacher-item");
             teacherItem.innerHTML = `
@@ -301,6 +304,9 @@ async function fetchAndDisplayTeachers() {
     } catch (error) {
         console.error("Error displaying teacher roster:", error);
     }
+
 }
+
+
 
 
