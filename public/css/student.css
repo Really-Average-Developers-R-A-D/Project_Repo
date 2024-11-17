@@ -226,6 +226,7 @@ body {
     display: flex;
     justify-content: space-between;
     font-weight: bold;
+
     align-items: center;
     position: relative;
 }
@@ -255,6 +256,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+
 }
 
 /* Change the color of the course when hover */
@@ -277,6 +279,7 @@ body {
 .course-list::-webkit-scrollbar-track {
     background-color: rgb(220, 220, 220);
 }
+
 
 /* Style the drop button for dropping a course */
 .drop-button {
@@ -354,6 +357,7 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
     transition: background-color 0.3s ease;
 }
@@ -397,5 +401,6 @@ body {
     border-right: 5px solid transparent;
     border-top: 5px solid #333;
     transition: transform 0.3s ease;
+
 }
 

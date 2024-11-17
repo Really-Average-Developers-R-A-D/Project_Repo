@@ -4,6 +4,8 @@
 const { Pool } = require("pg");
 const pool = new Pool({
     host: "ep-green-tree-a5jwyvca.us-east-2.aws.neon.tech",
+    user: "R.A.D Registration Database_owner",
+    password: "2pDCquHOtlX4",
     user: "R.A.D Registration Database_owner", 
     password: "2pDCquHOtlX4", 
     database: "R.A.D Registration Database",
@@ -22,6 +24,7 @@ module.exports = db = {
             const results = await client.query(`SELECT * FROM ${tableName}`);
             return results.rows;
         } finally {
+            client.release();
             client.release(); 
         }
     },
@@ -56,6 +59,7 @@ module.exports = db = {
     },
 
     // Get user details by associated username
+    getUserByUsername: async function (username) {
     getUserByUsername: async function(username) {
         const client = await pool.connect();
 
@@ -70,6 +74,7 @@ module.exports = db = {
     },
 
     // Change the user's password in the database
+    updateUserPassword: async function (username, newPassword) {
     updateUserPassword: async function(username, newPassword) {
         const client = await pool.connect();
 
@@ -83,6 +88,7 @@ module.exports = db = {
     },
 
     // Get a given's user's currently enrolled courses
+    getCoursesByEnrollment: async function (username) {
     getCoursesByEnrollment: async function(username) {
         const client = await pool.connect();
 
@@ -96,6 +102,8 @@ module.exports = db = {
                 JOIN course_major cm ON c.course_id = cm.course_id
                 JOIN majors m ON cm.major_id = m.major_id
                 JOIN users u ON r.user_id = u.user_id
+                WHERE u.username = $1
+
                 WHERE u.username = $1 AND r.status = 'enrolled'
         `   ;
             const result = await client.query(sql, [username]);
@@ -115,6 +123,7 @@ module.exports = db = {
             SELECT c.course_id, c.course_name, c.description
             FROM teaching t
             JOIN courses c ON t.course_id = c.course_id
+
             JOIN course_major cm ON   c.course_id = cm.course_id
             JOIN users u ON t.user_id = u.user_id
             WHERE u.username = $1 ;
@@ -126,6 +135,24 @@ module.exports = db = {
             client.release();
         }
     },
+
+
+
+    // Get all courses that a student can register for
+    getCoursesByAvailability: async function () {
+        const client = await pool.connect();
+
+        // Query gets all courses in the database where the the current enrollment has no exceeded maximum capacity
+        try {
+            const sql = `
+            SELECT m.major_name, c.course_id, c.course_name, c.description, c.current_enrollment, c.max_capacity
+            FROM courses c
+            JOIN course_major cm ON c.course_id = cm.course_id
+            JOIN majors m ON cm.major_id = m.major_id
+            WHERE c.current_enrollment < c.max_capacity
+            `;
+            const result = await client.query(sql);
+
 
 
     // Get all courses that a student can register for
@@ -148,11 +175,24 @@ module.exports = db = {
               AND r.course_id IS NULL
         `;
             const result = await client.query(sql, [userId]);
+
             return result.rows;
         } finally {
             client.release();
         }
     },
+
+
+    // Get all majors from the database
+    getAllMajors: async function () {
+        const client = await pool.connect();
+        try {
+            const sql = `SELECT major_name, descritption FROM majors;`;  // Adjust your SQL query here
+            const result = await client.query(sql);
+
+            return result.rows;  // Return all majors directly without additional filtering or transformation
+        } catch (error) {
+            console.error("Error fetching majors:", error);
 
     // Update the database for registered student
     registerStudentForCourse: async function(userId, courseId) {
@@ -191,11 +231,25 @@ module.exports = db = {
         } catch (error) {
             await client.query('ROLLBACK'); // Rollback the transaction in case of an error
             console.error("Error in registerStudentForCourse:", error);
+
             throw error;
         } finally {
             client.release();
         }
     },
+
+    // Get all majors from the database
+    getAllTeachers: async function () {
+        const client = await pool.connect();
+        try {
+            const sql = `SELECT first_name, last_name, office FROM users WHERE user_role ='teacher';`;  // Adjust your SQL query here
+            const result = await client.query(sql);
+
+            return result.rows;
+        } catch (error) {
+            console.error("Error fetching teacher roster:", error);
+            throw error;
+
 
     // Update course status to "dropped"
     updateCourseStatus: async function(userId, courseId) {
@@ -257,9 +311,11 @@ module.exports = db = {
 
         } catch (error) {
             console.error("Error in setOrUpdateMajor:", error);
+
         } finally {
             client.release();
         }
+
     },
 
     // Get the current major for a user
@@ -278,6 +334,9 @@ module.exports = db = {
             client.release();
         }
 }
+
+
+    }
 
 };
 

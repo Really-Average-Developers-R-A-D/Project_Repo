@@ -97,6 +97,7 @@ document.querySelector(".pass-reset .close").addEventListener("click", () => {
 });
 
 
+
 //Load the Teacher's courses
 document.addEventListener("DOMContentLoaded", async () => {
     // Fetch user details for the header

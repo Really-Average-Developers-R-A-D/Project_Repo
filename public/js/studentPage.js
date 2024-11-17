@@ -185,6 +185,7 @@ document.getElementById('available-courses').addEventListener('click', async () 
             <div class="course-item-header">
                 <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
                 <span class="course-register-date">Enrolled: ${course.current_enrollment} / ${course.max_capacity}</span>
+
                 <button class="register-button" data-course-id="${course.course_id}">Register</button>
             </div>
             <div class="course-description">
@@ -248,6 +249,9 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
     } catch (error) {
         console.error(error);
     }
+
+});
+
 });
 
 // Register button validation

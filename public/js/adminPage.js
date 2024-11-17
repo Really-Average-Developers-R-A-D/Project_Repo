@@ -1,3 +1,4 @@
+
 //admin page coming from studentPage.js(frontend)
 
 // This function gets the user's firstname and lastname from the database to display on the top right of the screen
@@ -288,7 +289,10 @@ async function fetchAndDisplayTeachers() {
         const teacherList = document.querySelector('.admin-info');
         teacherList.innerHTML = ''; 
 
+
         teachers.forEach(teacher => {
+
+
             const teacherItem = document.createElement("div");
             teacherItem.classList.add("teacher-item");
             teacherItem.innerHTML = `
@@ -300,4 +304,9 @@ async function fetchAndDisplayTeachers() {
     } catch (error) {
         console.error("Error displaying teacher roster:", error);
     }
+
 }
+
+
+
+
