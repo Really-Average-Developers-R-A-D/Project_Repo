@@ -174,8 +174,8 @@ router.get("/teacher-courses", async (req, res) => {
             return res.status(404).json({ error: "User not found" });
         }
 
-        // Query to get course details of the teacher
-        const result = await db.getCoursesByTeaching(username);
+        // Query to get active course details of the teacher
+        const result = await db.getCoursesByTeachingActive(username);
         console.log("All Courses: ", result);
         res.json(result);
     } catch (error) {
