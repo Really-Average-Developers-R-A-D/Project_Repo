@@ -127,7 +127,28 @@ module.exports = db = {
             client.release();
         }
     },
+// Get a given's teachers currently inactive courses
+    getCoursesByTeachingInactive: async function(username) {
+        const client = await pool.connect();
 
+        // Query to get a given teachers course(s)
+        try {
+            const sql = `
+            SELECT c.course_id, c.course_name, c.description, m.major_name, t.status 
+            FROM teaching t
+            JOIN courses c ON t.course_id = c.course_id
+            JOIN course_major cm ON   c.course_id = cm.course_id
+	        JOIN majors m ON cm.major_id = m.major_id
+            JOIN users u ON t.user_id = u.user_id
+            WHERE u.username = $1 AND t.status = 'inactive';
+
+        `   ;
+            const result = await client.query(sql, [username]);
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    },
 
     // Get all courses that a student can register for
     getCoursesByAvailability: async function(userId) {
