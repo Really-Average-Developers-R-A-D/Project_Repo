@@ -106,18 +106,19 @@ module.exports = db = {
     },
 
 // Get a given's teachers currently active courses
-    getCoursesByTeaching: async function(username) {
+    getCoursesByTeachingActive: async function(username) {
         const client = await pool.connect();
 
         // Query to get a given teachers course(s)
         try {
             const sql = `
-            SELECT c.course_id, c.course_name, c.description
+            SELECT c.course_id, c.course_name, c.description, m.major_name, t.status 
             FROM teaching t
             JOIN courses c ON t.course_id = c.course_id
             JOIN course_major cm ON   c.course_id = cm.course_id
+	        JOIN majors m ON cm.major_id = m.major_id
             JOIN users u ON t.user_id = u.user_id
-            WHERE u.username = $1 ;
+            WHERE u.username = $1 AND t.status = 'active';
 
         `   ;
             const result = await client.query(sql, [username]);
