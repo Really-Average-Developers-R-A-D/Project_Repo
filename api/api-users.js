@@ -5,7 +5,7 @@ const router = require("express").Router();
 const secret = "supersecret"; // for encoding/decoding JWT
 const db = require("./mysql-service"); 
 
-
+/* LOGIN PAGE */
 // Send a token when given valid username/password/role
 router.post("/auth", async function(req, res) {
 
@@ -85,6 +85,7 @@ router.get("/user-details", async (req, res) => {
     }
 });
 
+/* STUDENT / TEACHER / ADMIN PAGE */
 // Validates the user token to proceed with changing password
 router.post("/change-password", async (req, res) => {
     
@@ -118,6 +119,7 @@ router.post("/change-password", async (req, res) => {
     }
 });
 
+/* STUDENT PAGE */
 // Route to get the enrolled courses for the logged-in student
 router.get("/student-courses", async (req, res) => {
 
@@ -282,4 +284,136 @@ router.get("/current-major", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch current major" });
     }
 });
+
+/* ADMIN PAGE */
+
+
+// Route to get list of all majors for the adminstrator
+router.get('/all-majors', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getAllMajors();
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
+// Route to get list of all students for the adminstrator
+router.get('/all-students', async (req, res) => {
+    try {
+        //Query to get available courses
+        const result = await db.getAllStudents();
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all students:', error);
+        res.status(500).send('Error fetching all students');
+    }
+});
+
+// Route to get list of all teachers for the adminstrator
+router.get('/all-teachers', async (req, res) => {
+    try {
+        const result = await db.getAllTeachers();
+        console.log('All Teachers:', result);  // Log the result
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching teacher information:', error);
+        res.status(500).send('Error fetching teacher information');
+    }
+});
+
+// Route to get the courses for the logged-in teacher (TEACHER)
+router.get("/teacher-courses", async (req, res) => {
+
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    // Find the user by username in the database before running a query to get all the user's enrolled classes
+    try {
+        
+        // Decode token
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const username = decoded.username; 
+
+        // Fetch the user details from the database
+        const user = await db.getUserByUsername(username);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Query to get active course details of the teacher
+        const result = await db.getCoursesByTeachingActive(username);
+
+
+
+        console.log("Active Courses: ", result);
+
+
+        res.json(result);
+    } catch (error) {
+        console.error("Error fetching teacher courses:", error);
+        res.status(500).json({ error: "Failed to fetch courses" });
+    }
+});
+
+// Route to get the inactive courses for the logged-in teacher (TEACHER)
+router.get("/teacher-courses-inactive", async (req, res) => {
+
+
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+
+    // Find the user by username in the database before running a query to get all the user's enrolled classes
+    try {
+        
+        // Decode token
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const username = decoded.username; 
+
+        // Fetch the user details from the database
+        const user = await db.getUserByUsername(username);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+
+        // Query to get inactive course details of the teacher
+        const result = await db.getCoursesByTeachingInactive(username);
+        console.log("Inactive Courses: ", result);
+        res.json(result);
+    } catch (error) {
+        console.error("Error fetching teacher courses:", error);
+        res.status(500).json({ error: "Failed to fetch courses" });
+    }
+});
+
+// Route to change the status of a course (TEACHER)
+router.post("/change-course-status/:courseId", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id; // Fix this problem, user_id is null
+        const courseId = req.params.courseId;
+
+        const result = await db.changeCourseStatus(userId, courseId);
+        res.json({ message: "Successfully changed course status" });
+    } catch (error) {
+        console.error("Error during course status change:", error);
+        res.status(500).json({ error: "Failed to change course status" });
+    }
+});
+
 module.exports = router;

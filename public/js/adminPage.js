@@ -239,6 +239,7 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
 });
 
 // NEW STUFF
+
 async function fetchAndDisplayMajors() {
     try {
         const token = localStorage.getItem("token");
@@ -249,6 +250,8 @@ async function fetchAndDisplayMajors() {
                 "Content-Type": "application/json"
             }
         });
+    
+        console.log("What the fuck? (crack)");
 
         if (!response.ok) throw new Error('Failed to fetch majors');
         
@@ -267,37 +270,5 @@ async function fetchAndDisplayMajors() {
         });
     } catch (error) {
         console.error("Error displaying majors:", error);
-    }
-}
-
-// NEW STUFF
-async function fetchAndDisplayTeachers() {
-    try {
-        const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:3000/api/all-teachers", {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            }
-        });
-
-        if (!response.ok) throw new Error('Failed to fetch teachers');
-        
-        const teachers = await response.json(); 
-        const teacherList = document.querySelector('.admin-info');
-        teacherList.innerHTML = ''; 
-
-        teachers.forEach(teacher => {
-            const teacherItem = document.createElement("div");
-            teacherItem.classList.add("teacher-item");
-            teacherItem.innerHTML = `
-                <h3>${teacher.first_name}</h3>
-
-            `;
-            teacherList.appendChild(teacherItem);
-        });
-    } catch (error) {
-        console.error("Error displaying teacher roster:", error);
     }
 }

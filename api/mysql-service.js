@@ -254,7 +254,126 @@ module.exports = db = {
         } finally {
             client.release();
         }
-}
+    },
+
+    /* ADMIN PAGE */
+    // Get a given's teachers currently active courses
+    getCoursesByTeaching: async function(username) {
+        const client = await pool.connect();
+
+        // Query to get a given teachers course(s)
+        try {
+            const sql = `
+            SELECT c.course_id, c.course_name, c.description
+            FROM teaching t
+            JOIN courses c ON t.course_id = c.course_id
+            JOIN course_majors cm ON   c.course_id = cm.course_id
+            JOIN users u ON t.user_id = u.user_id
+            WHERE u.username = $1 ;
+
+
+        `   ;
+            const result = await client.query(sql, [username]);
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get all majors from the database
+    getAllMajors: async function () {
+        const client = await pool.connect();
+        try {
+            const sql = `SELECT major_name, descritption FROM majors;`;  // Adjust your SQL query here
+            const result = await client.query(sql);
+            console.log("result.rows: " ,result.rows)
+            return result.rows;  // Return all majors directly without additional filtering or transformation
+        } catch (error) {
+            console.error("Error fetching majors:", error);
+        } finally {
+            client.release();
+        }
+    },
+
+    getAllTeachers: async function () {
+        const client = await pool.connect();
+        try {
+            const sql = "SELECT first_name, last_name, office FROM users WHERE user_role = 'teacher'"; // Adjust your SQL query here
+            const result = await client.query(sql);
+    
+            return result.rows;
+        } catch (error) {
+            console.error("Error fetching teacher roster:", error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+    
+    // Get a given's teachers currently active courses (TEACHER)
+    getCoursesByTeachingActive: async function(username) {
+        const client = await pool.connect();
+
+        // Query to get a given teachers course(s)
+        try {
+            const sql = `
+            SELECT c.course_id, c.course_name, c.description, m.major_name, t.status 
+            FROM teaching t
+            JOIN courses c ON t.course_id = c.course_id
+            JOIN course_major cm ON   c.course_id = cm.course_id
+	        JOIN majors m ON cm.major_id = m.major_id
+            JOIN users u ON t.user_id = u.user_id
+            WHERE u.username = $1 AND t.status = 'active';
+
+        `   ;
+            const result = await client.query(sql, [username]);
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get a given's teachers currently inactive courses (TEACHER)
+    getCoursesByTeachingInactive: async function(username) {
+        const client = await pool.connect();
+
+        // Query to get a given teachers course(s)
+        try {
+            const sql = `
+            SELECT c.course_id, c.course_name, c.description, m.major_name, t.status 
+            FROM teaching t
+            JOIN courses c ON t.course_id = c.course_id
+            JOIN course_major cm ON   c.course_id = cm.course_id
+	        JOIN majors m ON cm.major_id = m.major_id
+            JOIN users u ON t.user_id = u.user_id
+            WHERE u.username = $1 AND t.status = 'inactive';
+
+        `   ;
+            const result = await client.query(sql, [username]);
+            return result.rows;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Change the status of a course for teacher (TEACHER)
+    changeCourseStatus: async function(userId, courseId){
+        const client = await pool.connect();
+        try{
+            const sql = `
+                UPDATE teaching
+                SET status = CASE
+                    WHEN status = 'inactive' THEN 'active'
+                    WHEN status = 'active' THEN 'inactive'
+                    ELSE status
+                END
+                WHERE user_id = $1 AND course_id = $2
+            `;
+            await client.query(sql, [userId,courseId]);
+        }finally{
+            client.release();
+        }
+    },
 
 };
 

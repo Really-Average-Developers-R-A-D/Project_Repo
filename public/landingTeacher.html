@@ -32,22 +32,14 @@
                 <!--Navigation bar down the side providing user functionality-->
                 <ul>
                     <!--Button to return the user to the landing page home screen-->
-                    <li><a href="#">Dashboard</a></li>
+                    <li><a href="#" id="dashboard">Dashboard</a></li>
 
                     <!--Dropdown menu for course management with additional options for the user-->
-                    <li class="dropdown">
-                        <a href="#">My Courses<span class="arrow-down"></span></a>
-                        <ul class="dropdown-content">
-                            <li><a href="#">Introduction to Programming</a></li>
-                            <li><a href="#">Data Structures</a></li>
-                            <li><a href="#">Operating Systems</a></li>
-                            <li><a href="#">Add Course</a></li>
-                        </ul>
-                    </li>
-                    <li>
-                        <!--Shows the password reset form on the bottom, if clicked-->
-                        <a href="#" id="password-reset" onclick=resetPass()>Change Password</a>
-                    </li>
+                    <li><a href="#" id="add-course">Add Course</a></li>
+
+                    <!--Shows the password reset form on the bottom, if clicked-->
+                    <li><a href="#" id="password-reset" onclick=resetPass()>Change Password</a></li>
+ 
                     <!--Logs the user out and returns them to the login page-->
                     <li><a href="Webtest.html">Logout</a></li>
                 </ul>
@@ -62,20 +54,26 @@
                     <h2>Active Courses</h2>
                     <div class="course-list">
                         <!-- Add multiple courses for the dashboard -->
-                        <div class="course-item">Course 120: Introduction to Programming</div>
+
+                        <!--<div class="course-item">Course 120: Introduction to Programming</div>
                         <div class="course-item">Course 205: Data Structures</div>
-                        <div class="course-item">Course 411: Operating Systems</div>
+                        <div class="course-item">Course 411: Operating Systems</div>-->
+
+                       
+
                     </div>
                 </div>
 
                 <!--Displays relevant information for user on bottom-->
                 <div class="course-dashboard">
                     <h2>Inactive Courses</h2>
-                    <div class="course-list">
+                    <div class="course-list-inactive">
                         <!-- Add multiple courses for the dashboard -->
-                        <div class="course-item">Course 117: Web Development</div>
+
+                        <!--<div class="course-item">Course 117: Web Development</div>
                         <div class="course-item">Course 406: Algorithms</div>
-                        <div class="course-item">Course 427: Software Engineering</div>
+                        <div class="course-item">Course 427: Software Engineering</div>-->
+
                     </div>
                 </div>
 

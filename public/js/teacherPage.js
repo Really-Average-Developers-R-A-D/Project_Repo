@@ -95,3 +95,129 @@ function resetPass() {
 document.querySelector(".pass-reset .close").addEventListener("click", () => {
     document.getElementById("pass-reset").style.display = "none";
 });
+
+
+//Load the Teacher's courses
+document.addEventListener("DOMContentLoaded", async () => {
+    // Fetch user details for the header
+    try {
+        const token = localStorage.getItem("token");
+        const userResponse = await fetch("http://localhost:3000/api/user-details", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        // Update HTML text given firstname and lastname
+        if (userResponse.ok) {
+            const userData = await userResponse.json();
+            document.getElementById("user-name").textContent = `${userData.firstName} ${userData.lastName}`;
+            document.getElementById("user-initials").textContent = `${userData.firstName.charAt(0)}${userData.lastName.charAt(0)}`;
+        } else {
+            console.error("Failed to fetch user details");
+        }
+    } catch (error) {
+        console.error("Error fetching user details:", error);
+    }
+
+    // Fetch courses for the teacher 
+    try {
+        const courseResponse = await fetch("http://localhost:3000/api/teacher-courses", {
+            headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+        });
+        if (courseResponse.ok) {
+            const courses = await courseResponse.json();
+            const courseList = document.querySelector(".course-list");
+            courseList.innerHTML = ""; // Clear any static content
+
+            // Add each course to the course list
+            courses.forEach(course => {
+                const courseItem = document.createElement("div");
+                courseItem.classList.add("course-item");
+                courseItem.innerHTML = `
+                    <div class="course-item-header">
+                        <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
+                    </div>
+                    <div class="course-description">
+                        <p>${course.description}</p>
+                    </div>
+
+                    <div>
+                        <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button>
+                    </div>
+                `;
+                courseList.appendChild(courseItem);
+            });
+        } else {
+            console.error("Failed to fetch courses");
+        }
+    } catch (error) {
+        console.error("Error fetching courses:", error);
+    }
+
+    //Fetch Teacher inactive courses
+    try {
+            const courseResponse = await fetch("http://localhost:3000/api/teacher-courses-inactive", {
+                headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+            });
+            if (courseResponse.ok) {
+                const courses = await courseResponse.json();
+                const inactiveCourseList = document.querySelector(".course-list-inactive");
+                inactiveCourseList.innerHTML = ""; // Clear any static content
+
+                // Add each course to the course list
+                courses.forEach(course => {
+                    const courseItem = document.createElement("div");
+                    courseItem.classList.add("course-item");
+                    courseItem.innerHTML = `
+                        <div class="course-item-header">
+                            <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
+                        </div>
+                        <div class="course-description">
+                            <p>${course.description}</p>
+                        </div>
+
+                        <div>
+                            <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button>
+                        </div>
+
+                    `;
+                    inactiveCourseList.appendChild(courseItem);
+                });
+            } else {
+                console.error("Failed to fetch courses");
+            }
+
+        //Add event listener to all "change status" buttons
+        document.querySelectorAll('.change-status-button').forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const courseId = event.target.getAttribute('data-course-id');
+                    await changeStatusForCourse(courseId);
+                });
+            });
+
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+        }
+});
+
+// Change status button validation
+async function changeStatusForCourse(courseId) {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch(`http://localhost:3000/api/change-course-status/${courseId}`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            }
+        });
+
+        if (!response.ok) throw new Error('Failed to change course status');
+        alert('Successfully changed course status!');
+    } catch (error) {
+        console.error("Error during status change:", error);
+    }
+}
