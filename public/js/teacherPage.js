@@ -152,6 +152,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     } catch (error) {
         console.error("Error fetching courses:", error);
     }
+
+    //Fetch Teacher inactive courses
+    try {
+            const courseResponse = await fetch("http://localhost:3000/api/teacher-courses-inactive", {
+                headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }
+            });
+            if (courseResponse.ok) {
+                const courses = await courseResponse.json();
+                const inactiveCourseList = document.querySelector(".course-list-inactive");
+                inactiveCourseList.innerHTML = ""; // Clear any static content
+
+                // Add each course to the course list
+                courses.forEach(course => {
+                    const courseItem = document.createElement("div");
+                    courseItem.classList.add("course-item");
+                    courseItem.innerHTML = `
+                        <div class="course-item-header">
+                            <span class="course-id-name">${course.major_name} ${course.course_id}: ${course.course_name}</span>
+                        </div>
+                        <div class="course-description">
+                            <p>${course.description}</p>
+                        </div>
+                    `;
+                    inactiveCourseList.appendChild(courseItem);
+                });
+            } else {
+                console.error("Failed to fetch courses");
+            }
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+        }
 });
 
 

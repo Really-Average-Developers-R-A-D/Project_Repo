@@ -238,3 +238,26 @@ body {
 .course-list::-webkit-scrollbar-track {
     background-color: rgb(220, 220, 220);
 }
+
+/* Style the course display list */
+.course-list-inactive {
+    max-height: 150px; /* Controls height for the course list */
+    overflow-y: auto;  /* Enables vertical scrolling when there are many courses */
+    padding: 10px;
+}
+
+/* Optional scroll bar */
+.course-list-inactive::-webkit-scrollbar {
+    width: 8px;
+}
+
+/* Style the scroll bar */
+.course-list-inactive::-webkit-scrollbar-thumb {
+    background-color: rgb(59, 82, 73);
+    border-radius: 4px;
+}
+
+/* Style the scroll bar */
+.course-list-inactive::-webkit-scrollbar-track {
+    background-color: rgb(220, 220, 220);
+}
