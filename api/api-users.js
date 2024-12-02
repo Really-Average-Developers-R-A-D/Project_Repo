@@ -177,7 +177,10 @@ router.get("/teacher-courses", async (req, res) => {
         // Query to get active course details of the teacher
         const result = await db.getCoursesByTeachingActive(username);
 
+
+
         console.log("Active Courses: ", result);
+
 
         res.json(result);
     } catch (error) {
@@ -189,10 +192,12 @@ router.get("/teacher-courses", async (req, res) => {
 // Route to get the inactive courses for the logged-in teacher
 router.get("/teacher-courses-inactive", async (req, res) => {
 
+
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
     }
+
 
     // Find the user by username in the database before running a query to get all the user's enrolled classes
     try {
@@ -256,6 +261,27 @@ router.post("/register-course/:courseId", async (req, res) => {
     } catch (error) {
         console.error("Error during course registration:", error);
         res.status(500).json({ error: "Failed to register for course" });
+    }
+});
+
+// Route to change the status of a course
+router.post("/change-course-status/:courseId", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id; // Fix this problem, user_id is null
+        const courseId = req.params.courseId;
+
+        const result = await db.changeCourseStatus(userId, courseId);
+        res.json({ message: "Successfully changed course status" });
+    } catch (error) {
+        console.error("Error during course status change:", error);
+        res.status(500).json({ error: "Failed to change course status" });
     }
 });
 
