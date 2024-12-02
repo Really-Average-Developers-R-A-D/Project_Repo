@@ -234,6 +234,24 @@ module.exports = db = {
         }
     },
 
+    changeCourseStatus: async function(userId, courseId){
+        const client = await pool.connect();
+        try{
+            const sql = `
+                UPDATE teaching
+                SET status = CASE
+                    WHEN status = 'inactive' THEN 'active'
+                    WHEN status = 'active' THEN 'inactive'
+                    ELSE status
+                END
+                WHERE user_id = $1 AND course_id = $2
+            `;
+            await client.query(sql, [userId,courseId]);
+        }finally{
+            client.release();
+        }
+    },
+
     // Fetch all dropped courses for a specific user
     getDroppedCourses: async function(userId) {
         const client = await pool.connect();

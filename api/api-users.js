@@ -257,6 +257,27 @@ router.post("/register-course/:courseId", async (req, res) => {
     }
 });
 
+// Route to change the status of a course
+router.post("/change-course-status/:courseId", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const token = authHeader.split(" ")[1];
+        const decoded = jwt.decode(token, secret);
+        const userId = decoded.user_id; // Fix this problem, user_id is null
+        const courseId = req.params.courseId;
+
+        const result = await db.changeCourseStatus(userId, courseId);
+        res.json({ message: "Successfully changed course status" });
+    } catch (error) {
+        console.error("Error during course status change:", error);
+        res.status(500).json({ error: "Failed to change course status" });
+    }
+});
+
 // Route to drop a course
 router.post("/drop-course/:courseId", async (req, res) => {
     const authHeader = req.headers.authorization;
