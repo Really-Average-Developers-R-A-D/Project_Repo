@@ -176,7 +176,9 @@ router.get("/teacher-courses", async (req, res) => {
 
         // Query to get active course details of the teacher
         const result = await db.getCoursesByTeachingActive(username);
+
         console.log("Active Courses: ", result);
+
         res.json(result);
     } catch (error) {
         console.error("Error fetching teacher courses:", error);
