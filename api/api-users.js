@@ -176,7 +176,12 @@ router.get("/teacher-courses", async (req, res) => {
 
         // Query to get active course details of the teacher
         const result = await db.getCoursesByTeachingActive(username);
+
+
+
         console.log("Active Courses: ", result);
+
+
         res.json(result);
     } catch (error) {
         console.error("Error fetching teacher courses:", error);
@@ -187,10 +192,12 @@ router.get("/teacher-courses", async (req, res) => {
 // Route to get the inactive courses for the logged-in teacher
 router.get("/teacher-courses-inactive", async (req, res) => {
 
+
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({ error: "Authorization header missing" });
     }
+
 
     // Find the user by username in the database before running a query to get all the user's enrolled classes
     try {

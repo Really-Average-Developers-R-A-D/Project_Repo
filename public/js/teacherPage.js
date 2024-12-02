@@ -178,15 +178,18 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <div class="course-description">
                             <p>${course.description}</p>
                         </div>
+
                         <div>
                             <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button>
                         </div>
+
                     `;
                     inactiveCourseList.appendChild(courseItem);
                 });
             } else {
                 console.error("Failed to fetch courses");
             }
+
         //Add event listener to all "change status" buttons
         document.querySelectorAll('.change-status-button').forEach(button => {
                 button.addEventListener('click', async (event) => {
@@ -194,6 +197,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     await changeStatusForCourse(courseId);
                 });
             });
+
         } catch (error) {
             console.error("Error fetching courses:", error);
         }

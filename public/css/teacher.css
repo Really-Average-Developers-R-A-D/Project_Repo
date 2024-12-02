@@ -260,6 +260,7 @@ body {
 /* Style the scroll bar */
 .course-list-inactive::-webkit-scrollbar-track {
     background-color: rgb(220, 220, 220);
+
 }
 
 /* Position and style the change status button */
@@ -277,4 +278,5 @@ body {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s ease;
+
 }
