@@ -4,8 +4,8 @@
 const { Pool } = require("pg");
 const pool = new Pool({
     host: "ep-green-tree-a5jwyvca.us-east-2.aws.neon.tech",
-    user: "R.A.D Registration Database_owner", 
-    password: "2pDCquHOtlX4", 
+    user: "R.A.D Registration Database_owner",
+    password: "2pDCquHOtlX4",
     database: "R.A.D Registration Database",
     port: 5432,
     ssl: { rejectUnauthorized: false }
@@ -22,7 +22,7 @@ module.exports = db = {
             const results = await client.query(`SELECT * FROM ${tableName}`);
             return results.rows;
         } finally {
-            client.release(); 
+            client.release();
         }
     },
 
@@ -56,7 +56,7 @@ module.exports = db = {
     },
 
     // Get user details by associated username
-    getUserByUsername: async function(username) {
+    getUserByUsername: async function (username) {
         const client = await pool.connect();
 
         // Find user information in the database given the username
@@ -70,7 +70,7 @@ module.exports = db = {
     },
 
     // Change the user's password in the database
-    updateUserPassword: async function(username, newPassword) {
+    updateUserPassword: async function (username, newPassword) {
         const client = await pool.connect();
 
         // Query to change given user's password
@@ -83,7 +83,7 @@ module.exports = db = {
     },
 
     // Get a given's user's currently enrolled courses
-    getCoursesByEnrollment: async function(username) {
+    getCoursesByEnrollment: async function (username) {
         const client = await pool.connect();
 
         // Query to get a given user's currently enrolled course(s)
@@ -105,8 +105,8 @@ module.exports = db = {
         }
     },
 
-// Get a given's teachers currently active courses
-    getCoursesByTeachingActive: async function(username) {
+    // Get a given's teachers currently active courses
+    getCoursesByTeachingActive: async function (username) {
         const client = await pool.connect();
 
         // Query to get a given teachers course(s)
@@ -127,8 +127,8 @@ module.exports = db = {
             client.release();
         }
     },
-// Get a given's teachers currently inactive courses
-    getCoursesByTeachingInactive: async function(username) {
+    // Get a given's teachers currently inactive courses
+    getCoursesByTeachingInactive: async function (username) {
         const client = await pool.connect();
 
         // Query to get a given teachers course(s)
@@ -151,7 +151,7 @@ module.exports = db = {
     },
 
     // Get all courses that a student can register for
-    getCoursesByAvailability: async function(userId) {
+    getCoursesByAvailability: async function (userId) {
         const client = await pool.connect();
 
         // Query gets all courses in the database where the the current enrollment has no exceeded maximum capacity
@@ -177,7 +177,7 @@ module.exports = db = {
     },
 
     // Update the database for registered student
-    registerStudentForCourse: async function(userId, courseId) {
+    registerStudentForCourse: async function (userId, courseId) {
         const client = await pool.connect();
 
         // Protect database against errors
@@ -194,7 +194,7 @@ module.exports = db = {
             const { max_capacity, current_enrollment } = capacityResult.rows[0];
 
             if (current_enrollment >= max_capacity) {
-            throw new Error("Course is full");
+                throw new Error("Course is full");
             }
 
             // Insert a new record or update the status to 'enrolled' if a record already exists
@@ -220,7 +220,7 @@ module.exports = db = {
     },
 
     // Update course status to "dropped"
-    updateCourseStatus: async function(userId, courseId) {
+    updateCourseStatus: async function (userId, courseId) {
         const client = await pool.connect();
         try {
             const sql = `
@@ -234,9 +234,9 @@ module.exports = db = {
         }
     },
 
-    changeCourseStatus: async function(userId, courseId){
+    changeCourseStatus: async function (userId, courseId) {
         const client = await pool.connect();
-        try{
+        try {
             const sql = `
                 UPDATE teaching
                 SET status = CASE
@@ -246,14 +246,14 @@ module.exports = db = {
                 END
                 WHERE user_id = $1 AND course_id = $2
             `;
-            await client.query(sql, [userId,courseId]);
-        }finally{
+            await client.query(sql, [userId, courseId]);
+        } finally {
             client.release();
         }
     },
 
     // Fetch all dropped courses for a specific user
-    getDroppedCourses: async function(userId) {
+    getDroppedCourses: async function (userId) {
         const client = await pool.connect();
         try {
             const sql = `
@@ -272,7 +272,7 @@ module.exports = db = {
     },
 
     // Fetch list of all majors
-    getMajors: async function() {
+    getMajors: async function () {
         const client = await pool.connect();
         try {
             const sql = `SELECT major_id, major_name FROM majors`;
@@ -284,7 +284,7 @@ module.exports = db = {
     },
 
     // Set or update a user's major
-    setOrUpdateMajor: async function(userId, majorId) {
+    setOrUpdateMajor: async function (userId, majorId) {
         const client = await pool.connect();
         try {
             const sql = `
@@ -303,7 +303,7 @@ module.exports = db = {
     },
 
     // Get the current major for a user
-    getCurrentMajor: async function(userId) {
+    getCurrentMajor: async function (userId) {
         const client = await pool.connect();
         try {
             const sql = `
@@ -317,7 +317,22 @@ module.exports = db = {
         } finally {
             client.release();
         }
-}
-
+    },
+    addMajor: async function (majorName, majorDescription) {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(
+                `INSERT INTO majors (major_name, descritption) 
+             VALUES ($1, $2) RETURNING *`,
+                [majorName, majorDescription]
+            );
+            return result.rows[0];  // Return the newly inserted major
+        } catch (error) {
+            console.error("Error adding major:", error.message);  // Log the error message
+            throw new Error("Failed to add major: " + error.message);
+        } finally {
+            client.release();
+        }
+    }
 };
 
