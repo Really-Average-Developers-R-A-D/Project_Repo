@@ -145,7 +145,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
 
                     <div>
-                        <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button>
+                        <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button><button class="show-roster-button" data-course-id="${course.course_id}">Show Roster</button>
                     </div>
                 `;
                 courseList.appendChild(courseItem);
@@ -180,7 +180,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         </div>
 
                         <div>
-                            <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button>
+                            <button class="change-status-button" data-course-id="${course.course_id}">Change Status</button> <button class="show-roster-button" data-course-id="${course.course_id}">Show Roster</button>
                         </div>
 
                     `;
@@ -202,6 +202,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Error fetching courses:", error);
         }
 });
+
+document.getElementById('show-roster-button').addEventListener('click', async() =>{
+    document.getElementById('roster-list').style.display = 'block';
+})
 
 // Change status button validation
 async function changeStatusForCourse(courseId) {
