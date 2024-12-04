@@ -59,14 +59,99 @@
             <!--Displays relevant buttons for admin-->
             <div class="admin-buttons">
                 <button id="majors-button" onclick="fetchAndDisplayMajors()">Majors</button>
-                <button id="teachers-button" onclick="fetchAndDisplayTeachers()">Teachers</button>
-                <button id="students">Students</button>
+                <button id="teachers-button" onclick="fetchAndDisplayCourses()">Courses</button>
             </div>
             
             <div class="admin-info">
                 <!-- Major List Section -->
+                <div class = "retrieved-data-list">
+
+                </div>
                 <div class="major-list">
-                    <!-- Majors will be dynamically inserted here -->
+                    <div class = "add-student-form">
+                        <form id="studentForm">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" name="lastName" required><br><br>
+                            
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" required>
+                
+                             <label for="password">Password:</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                minlength="6" 
+                                required
+                            ><br><br>
+                            
+                            <label for="phoneNumber">Phone Number:</label>
+                            <input 
+                                type="tel" 
+                                id="phoneNumber" 
+                                name="phoneNumber" 
+                                pattern="[0-9]{10}" 
+                                placeholder="5851231234" 
+                                required
+                            ><br><br>
+                            
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                    <div class = "add-teacher-form">
+                        <form id="teacherForm">
+                            <label for="firstName">First Name:</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            
+                            <label for="lastName">Last Name:</label>
+                            <input type="text" id="lastName" name="lastName" required><br><br>
+                            
+                            <label for="username">Username:</label>
+                            <input type="text" id="username" name="username" required>
+                    
+                            <label for="password">Password:</label>
+                            <input 
+                                type="password" 
+                                id="password" 
+                                name="password" 
+                                minlength="6" 
+                                required
+                            ><br><br>
+                            
+                            <label for="phoneNumber">Phone Number:</label>
+                            <input 
+                                type="tel" 
+                                id="phoneNumber" 
+                                name="phoneNumber" 
+                                pattern="[0-9]{10}" 
+                                placeholder="5851231234" 
+                                required
+                            ><br><br>
+                    
+                            <label for="officeNumber">Office Number:</label>
+                            <input 
+                                type="text" 
+                                id="officeNumber" 
+                                name="officeNumber" 
+                                pattern="^[0-9]+$" 
+                                title="Only numeric values are allowed" 
+                                required
+                            ><br><br>
+                    
+                            <button type="submit">Submit</button>
+                    </div>
+                    <div class = "add-major-form">
+                        <form id="majorForm">
+                            <label for="majorName">Major Name (3 characters):</label><br>
+                            <input type="text" id="majorName" name="majorName" maxlength="3" required><br><br>
+                            <label for="majorDescription">Full Name of Major:</label><br>
+                            <textarea id="majorDescription" name="majorDescription" rows="1" cols="40" required></textarea><br><br>
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
                 </div>
             </div>
 
