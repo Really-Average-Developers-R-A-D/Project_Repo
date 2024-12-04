@@ -378,4 +378,28 @@ router.get("/current-major", async (req, res) => {
         res.status(500).json({ error: "Failed to fetch current major" });
     }
 });
+
+// Route to add a major
+router.post("/add-a-major", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const { majorName, majorDescription } = req.body;
+
+        if (!majorName || !majorDescription) {
+            return res.status(400).json({ error: "Missing required fields (majorName, majorDescription)" });
+        }
+
+        const newMajor = await db.addMajor(majorName, majorDescription);
+
+        res.status(201).json({ message: "Major added successfully", newMajor });
+    } catch (error) {
+        console.error("Error adding major:", error.message);  // Log the exact error message
+        res.status(500).json({ error: "Failed to add major", details: error.message });
+    }
+});
+
 module.exports = router;
