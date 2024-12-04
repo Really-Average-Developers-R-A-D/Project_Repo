@@ -318,6 +318,44 @@ module.exports = db = {
             client.release();
         }
     },
+
+    // Add new student into the database
+    addStudent: async function (firstName, lastName, username, password, phoneNumber) {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(
+                `INSERT INTO users (first_name, last_name, username, password_, user_role, phone_number) 
+                 VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
+                [firstName, lastName, username, password, "student", phoneNumber]
+            );
+            return result.rows[0];
+        } catch (error) {
+            console.error("Error adding student:", error.message);
+            throw new Error("Failed to add student: " + error.message);
+        } finally {
+            client.release();
+        }
+    },
+
+    // Add new teacher into the database
+    addTeacher: async function (firstName, lastName, username, password, phoneNumber, office) {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(
+                `INSERT INTO users (first_name, last_name, username, password_, user_role, phone_number, office) 
+                 VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
+                [firstName, lastName, username, password, "teacher", phoneNumber, office]
+            );
+            return result.rows[0];
+        } catch (error) {
+            console.error("Error adding teacher:", error.message);
+            throw new Error("Failed to add teacher: " + error.message);
+        } finally {
+            client.release();
+        }
+    },
+    
+    // Add new major into the database
     addMajor: async function (majorName, majorDescription) {
         const client = await pool.connect();
         try {
@@ -328,8 +366,76 @@ module.exports = db = {
             );
             return result.rows[0];  // Return the newly inserted major
         } catch (error) {
-            console.error("Error adding major:", error.message);  // Log the error message
+            console.error("Error adding major:", error.message); 
             throw new Error("Failed to add major: " + error.message);
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get all majors from the database
+    getAllMajors: async function () {
+        const client = await pool.connect();
+
+        try {
+            const sql = `SELECT major_name, descritption FROM majors;`; 
+            const result = await client.query(sql);
+
+            return result.rows; 
+        } catch (error) {
+            console.error("Error fetching majors:", error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get all courses from the database
+    getAllCourses: async function () {
+        const client = await pool.connect();
+
+        try {
+            const sql = `SELECT course_name, description, max_capacity, current_enrollment, course_id FROM courses;`; 
+            const result = await client.query(sql);
+
+            return result.rows; 
+        } catch (error) {
+            console.error("Error fetching courses:", error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get course roster for a course from the database
+    getCourseRosterForAdmin: async function (courseID) {
+        const client = await pool.connect();
+
+        try {
+            const sql = `;`; 
+            const result = await client.query(sql);
+
+            return result.rows; 
+        } catch (error) {
+            console.error("Error fetching course roster:", error);
+            throw error;
+        } finally {
+            client.release();
+        }
+    },
+
+    // Get course professor for a course from the database
+    getCourseProfForAdmin: async function () {
+        const client = await pool.connect();
+
+        try {
+            const sql = `SELECT first_name, last_name FROM users WHERE user_id = (SELECT user_id FROM teaching WHERE course_id = courseID);`; 
+            const result = await client.query(sql);
+
+            return result.rows; 
+        } catch (error) {
+            console.error("Error fetching course roster:", error);
+            throw error;
         } finally {
             client.release();
         }

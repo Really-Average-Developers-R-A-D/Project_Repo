@@ -379,6 +379,52 @@ router.get("/current-major", async (req, res) => {
     }
 });
 
+// Route to add a student
+router.post("/add-a-student", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const { firstName, lastName, username, password, phoneNumber} = req.body;
+
+        if (!firstName || !lastName || !username || !password || !phoneNumber) {
+            return res.status(400).json({ error: "Missing required fields (firstName, lastName, username, password, phoneNumber)" });
+        }
+
+        const newStudent = await db.addStudent(firstName, lastName, username, password, phoneNumber);
+
+        res.status(201).json({ message: "Student added successfully", newStudent });
+    } catch (error) {
+        console.error("Error adding student:", error.message);
+        res.status(500).json({ error: "Failed to add student", details: error.message });
+    }
+});
+
+// Route to add a teacher
+router.post("/add-a-teacher", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const { firstName, lastName, username, password, phoneNumber, office} = req.body;
+
+        if (!firstName || !lastName || !username || !password || !phoneNumber || !office) {
+            return res.status(400).json({ error: "Missing required fields (firstName, lastName, username, password, phoneNumber, office)" });
+        }
+
+        const newStudent = await db.addTeacher(firstName, lastName, username, password, phoneNumber, office);
+
+        res.status(201).json({ message: "Teacher added successfully", newStudent });
+    } catch (error) {
+        console.error("Error adding teacher:", error.message);
+        res.status(500).json({ error: "Failed to add teacher", details: error.message });
+    }
+});
+
 // Route to add a major
 router.post("/add-a-major", async (req, res) => {
     const authHeader = req.headers.authorization;
@@ -397,8 +443,80 @@ router.post("/add-a-major", async (req, res) => {
 
         res.status(201).json({ message: "Major added successfully", newMajor });
     } catch (error) {
-        console.error("Error adding major:", error.message);  // Log the exact error message
+        console.error("Error adding major:", error.message); 
         res.status(500).json({ error: "Failed to add major", details: error.message });
+    }
+});
+
+// Route to get all majors for admin
+router.get('/all-majors', async (req, res) => {
+    try {
+        const result = await db.getAllMajors();
+        console.log('All Majors:', result);  // Log the result
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all majors:', error);
+        res.status(500).send('Error fetching all majors');
+    }
+});
+
+// Route to get all courses for admin
+router.get('/all-courses', async (req, res) => {
+    try {
+        const result = await db.getAllCourses();
+        console.log('All Courses:', result);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all courses:', error);
+        res.status(500).send('Error fetching all courses');
+    }
+});
+
+// Route to get all courses for admin
+router.get('/all-courses', async (req, res) => {
+    try {
+        const result = await db.getAllCourses();
+        console.log('All Courses:', result);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching all courses:', error);
+        res.status(500).send('Error fetching all courses');
+    }
+});
+
+// Route to get the course roster for the admin
+router.get('/get-course-roster', async (req, res) => {
+    const courseId = req.query.courseId;
+
+    if (!courseId) {
+        return res.status(400).send('Missing courseId parameter');
+    }
+
+    try {
+        const result = await db.getCourseRosterForAdmin(courseId);
+        console.log(`Students for course ${courseId}:`, result);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching the course roster:', error);
+        res.status(500).send('Error fetching the course roster');
+    }
+});
+
+// Route to get the course professor for the admin
+router.get('/get-course-professor', async (req, res) => {
+    const courseId = req.query.courseId;
+
+    if (!courseId) {
+        return res.status(400).send('Missing courseId parameter');
+    }
+
+    try {
+        const result = await db.getCourseProfForAdmin(courseId);
+        console.log(`Professor for course ${courseId}:`, result);
+        res.json(result);
+    } catch (error) {
+        console.error('Error fetching the professor for the course:', error);
+        res.status(500).send('Error fetching the professor for the course');
     }
 });
 
