@@ -31,11 +31,11 @@
 
                 <!--Navigation bar down the side providing user functionality-->
                 <ul>
-                    <!--Button to return the user to the landing page home screen-->
+                    <!--SMALL UPDATEButton to return the user to the landing page home screen-->
                     <li><a href="#" id="dashboard">Dashboard</a></li>
 
-                    <!--Dropdown menu for course management with additional options for the user-->
-                    <li><a href="#" id="add-course">Add Course</a></li>
+                    <!--UPDATED***Dropdown menu for course management with additional options for the user***-->
+                    <li><a href="#" id="add-course" onclick="addACourse()">Add Course</a></li>
 
                     <!--Shows the password reset form on the bottom, if clicked-->
                     <li><a href="#" id="password-reset" onclick=resetPass()>Change Password</a></li>
@@ -65,7 +65,7 @@
                 </div>
 
                 <!--Displays relevant information for user on bottom-->
-                <div class="course-dashboard">
+                <div class="course-dashboard-inactive">
                     <h2>Inactive Courses</h2>
                     <div class="course-list-inactive">
                         <!-- Add multiple courses for the dashboard -->

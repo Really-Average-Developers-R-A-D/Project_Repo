@@ -32,17 +32,13 @@ router.post("/auth", async function(req, res) {
 
 // Check token and return users' data (Currently unused)
 router.get("/status", async function(req, res) {
-    //console.log("Entered the get");
     if (!req.headers["x-auth"]) {
         return res.status(401).json({ error: "Missing X-Auth headers" });
     }
 
     const token = req.headers["x-auth"];
-    //console.log("Read the token");
     try {
-        //console.log("entered try");
         const decoded = jwt.decode(token, secret);
-        //console.log("Entering database");
         const users = await db.selectAll("users");
         res.json(users);
     } catch (ex) {
@@ -316,7 +312,7 @@ router.get('/all-students', async (req, res) => {
 router.get('/all-teachers', async (req, res) => {
     try {
         const result = await db.getAllTeachers();
-        console.log('All Teachers:', result);  // Log the result
+        //console.log('All Teachers:', result);  // Log the result
         res.json(result);
     } catch (error) {
         console.error('Error fetching teacher information:', error);
@@ -351,7 +347,7 @@ router.get("/teacher-courses", async (req, res) => {
 
 
 
-        console.log("Active Courses: ", result);
+        //console.log("Active Courses: ", result);
 
 
         res.json(result);
@@ -387,7 +383,7 @@ router.get("/teacher-courses-inactive", async (req, res) => {
 
         // Query to get inactive course details of the teacher
         const result = await db.getCoursesByTeachingInactive(username);
-        console.log("Inactive Courses: ", result);
+        //console.log("Inactive Courses: ", result);
         res.json(result);
     } catch (error) {
         console.error("Error fetching teacher courses:", error);
@@ -416,4 +412,50 @@ router.post("/change-course-status/:courseId", async (req, res) => {
     }
 });
 
+// Route to add a major
+router.post("/add-a-major", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const { majorName, majorDescription } = req.body;
+
+        if (!majorName || !majorDescription) {
+            return res.status(400).json({ error: "Missing required fields (majorName, majorDescription)" });
+        }
+
+        const newMajor = await db.addMajor(majorName, majorDescription);
+
+        res.status(201).json({ message: "Major added successfully", newMajor });
+    } catch (error) {
+        console.error("Error adding major:", error.message);  // Log the exact error message
+        res.status(500).json({ error: "Failed to add major", details: error.message });
+    }
+});
+
+// Route to add a major
+router.post("/add-a-course", async (req, res) => {
+    const authHeader = req.headers.authorization;
+    if (!authHeader) {
+        return res.status(401).json({ error: "Authorization header missing" });
+    }
+
+    try {
+        const { courseNumber, courseName, courseDescription, capacity } = req.body;
+
+        if (!courseNumber || !courseName || !courseDescription || !capacity) {
+            return res.status(400).json({ error: "Missing required fields (courseName, courseDescription)" });
+        }
+        
+        console.log("Course#:", courseNumber, "\nCoursename:", courseName, "\ncourseDesc:", courseDescription, "\ncap:", capacity)
+        const newCourse = await db.addCourse(courseNumber, courseName, courseDescription, capacity);
+
+        res.status(201).json({ message: "Course added successfully", newCourse });
+    } catch (error) {
+        console.error("Error adding course:", error.message);  // Log the exact error message
+        res.status(500).json({ error: "Failed to add course", details: error.message });
+    }
+});
 module.exports = router;

@@ -1,4 +1,4 @@
-/*student.css*/
+/*admin.css*/
 /* Define page dimensions */
 body {
     margin: 0;
@@ -280,4 +280,11 @@ body {
     border-radius: 5px;
     margin: 10px;
     padding: 5px;
+}
+
+.form {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ccc;
+    border-radius: 5px;
+    padding: 30px;
 }

@@ -375,5 +375,40 @@ module.exports = db = {
         }
     },
 
+    // Add a major to the database
+    addMajor: async function (majorName, majorDescription) {
+        const client = await pool.connect();
+        try {
+            const result = await client.query(
+                `INSERT INTO majors (major_name, descritption) 
+             VALUES ($1, $2) RETURNING *`,
+                [majorName, majorDescription]
+            );
+            return result.rows[0];  // Return the newly inserted major
+        } catch (error) {
+            console.error("Error adding major:", error.message);  // Log the error message
+            throw new Error("Failed to add major: " + error.message);
+        } finally {
+            client.release();
+        }
+    },
+
+        // Add a course to the database
+        addCourse: async function (courseNumber, courseName, courseDescription, capacity) {
+            const client = await pool.connect();
+            try {
+                const result = await client.query(
+                    `INSERT INTO courses (course_id, course_name, description, max_capacity, current_enrollment, update_at) 
+                 VALUES ($1, $2, $3, $4, 0, CURRENT_DATE) RETURNING *`,
+                    [courseNumber, courseName, courseDescription, capacity]
+                );
+                return result.rows[0];  // Return the newly inserted course
+            } catch (error) {
+                console.error("Error adding course:", error.message);  // Log the error message
+                throw new Error("Failed to add course: " + error.message);
+            } finally {
+                client.release();
+            }
+        }
 };
 

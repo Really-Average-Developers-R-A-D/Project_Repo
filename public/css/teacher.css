@@ -1,3 +1,4 @@
+/*teacher.css*/
 /* Define page dimensions */
 body {
     margin: 0;
@@ -267,4 +268,38 @@ body {
     font-size: 16px;
     transition: background-color 0.3s ease;
 
+}
+
+/* Position the add course form */
+.add-course {
+    margin-bottom: 15px;
+}
+
+/* Style the add course form */
+.add-course label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Style the textboxes for the add course form */
+.add-course input,
+.add-course textarea {
+    width: 25%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Style for the dashboard information */
+.course-dashboard-inactive {
+    background-color: rgb(190, 197, 173);
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    max-height: 250px; /* Set a maximum height for the dashboard */
+    overflow-y: auto;  /* Enable vertical scroll if content exceeds max-height */
 }

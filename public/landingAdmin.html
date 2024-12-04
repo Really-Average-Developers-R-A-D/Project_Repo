@@ -33,15 +33,15 @@
             <!--Navigation bar down the side providing user functionality-->
             <ul>
                 <!--Button to return the user to the landing page home screen-->
-                <li><a href="#">Dashboard</a></li>
+                <li><a href="#" onclick=returnToDashboard()>Dashboard</a></li>
 
                 <!--Dropdown menu for course management with additional options for the user-->
                 <li class="dropdown">
                     <a href="#">User Actions<span class="arrow-down"></span></a>
                     <ul class="dropdown-content">
-                        <li><a href="#">Add a Student</a></li>
-                        <li><a href="#">Add a Teacher</a></li>
-                        <li><a href="#">Add a Major</a></li>
+                        <li><a href="#" onclick=addAStudent()>Add a Student</a></li>
+                        <li><a href="#" onclick=addATeacher()>Add a Teacher</a></li>
+                        <li><a href="#" onclick=addAMajor()>Add a Major</a></li>
                     </ul>
                 </li>
                 <li>
@@ -58,10 +58,10 @@
             <h1>Dashboard</h1>
             <!--Displays relevant buttons for admin-->
             <div class="admin-buttons">
-                    <button id="majors-button" onclick="fetchAndDisplayMajors()">Majors</button>
-                    <button id="teachers-button" onclick="fetchAndDisplayTeachers()">Teachers</button>
-                    <button id="students" onclick="fetchAndDisplayStudents()">Students</button>
-                </div>
+                <button id="majors-button" onclick="fetchAndDisplayMajors()">Majors</button>
+                <button id="teachers-button" onclick="fetchAndDisplayTeachers()">Teachers</button>
+                <button id="students">Students</button>
+            </div>
             
             <div class="admin-info">
                 <!-- Major List Section -->

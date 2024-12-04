@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const changePasswordLink = document.getElementById("password-reset");
     const modal = document.getElementById("changePasswordModal");
     const closeModal = document.querySelector(".close");
-    
+
     // Show the modal when the "Change Password" link is clicked
     changePasswordLink.addEventListener("click", () => {
         modal.style.display = "block";
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const oldPassword = document.getElementById("oldPassword").value;
         const newPassword = document.getElementById("newPassword").value;
         const token = localStorage.getItem("token");
-        
+
         try {
             const response = await fetch("http://localhost:3000/api/change-password", {
                 method: "POST",
@@ -154,7 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // Load courses available to register for    
 document.getElementById('available-courses').addEventListener('click', async () => {
-    
+
     // Validate user token
     try {
         const token = localStorage.getItem("token");
@@ -165,9 +165,9 @@ document.getElementById('available-courses').addEventListener('click', async () 
                 "Content-Type": "application/json"
             }
         });
-    
+
         if (!userResponse.ok) throw new Error('Failed to fetch available courses');
-        
+
         // Change the title to available courses
         const heading = document.querySelector('.course-dashboard h2');
         heading.textContent = 'Available Courses';
@@ -209,10 +209,10 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
                 "Content-Type": "application/json"
             }
         });
-    
+
         if (!courseResponse.ok) throw new Error('Failed to fetch student courses');
-        
-       
+
+
 
         const courses = await courseResponse.json();
         const courseList = document.querySelector('.admin-info');
@@ -239,7 +239,6 @@ document.getElementById("dashboard-button").addEventListener("click", async () =
 });
 
 // NEW STUFF
-
 async function fetchAndDisplayMajors() {
     try {
         const token = localStorage.getItem("token");
@@ -250,11 +249,9 @@ async function fetchAndDisplayMajors() {
                 "Content-Type": "application/json"
             }
         });
-    
-        console.log("What the fuck? (crack)");
 
         if (!response.ok) throw new Error('Failed to fetch majors');
-        
+
         const majors = await response.json(); // Assuming backend sends JSON
         const majorList = document.querySelector('.major-list');
         majorList.innerHTML = '';  // Clear any previous majors
@@ -271,4 +268,124 @@ async function fetchAndDisplayMajors() {
     } catch (error) {
         console.error("Error displaying majors:", error);
     }
+}
+
+async function addATeacher() {
+    const heading = document.querySelector("#content h1");
+    heading.textContent = "Add a Teacher";
+
+    document.querySelector('.admin-buttons').style.display = 'none';
+
+    const navBar = document.querySelector('.admin-info');
+    navBar.innerHTML = '';  // Clear any previous text
+    navBar.className = "";
+    const majorList = document.querySelector('.major-list');
+    majorList.innerHTML = '';  // Clear any previous text
+}
+
+async function addAStudent() {
+    const heading = document.querySelector("#content h1");
+    heading.textContent = "Add a Student";
+
+    document.querySelector('.admin-buttons').style.display = 'none';
+
+    const navBar = document.querySelector('.admin-info');
+    navBar.innerHTML = '';  // Clear any previous text
+    navBar.className = "";
+    const majorList = document.querySelector('.major-list'); 
+    majorList.className = 'form';
+    majorList.innerHTML = '<form id="studentForm"><label for="firstName">First Name:</label><br><input type="text" id="firstName" name="firstName" required><br><br><label for="lastName">Last Name:</label><br><input type="text" id="lastName" name="lastName" required><br><br><label for="username">Username:</label><br><input type="text" id="username" name="username" required><br><br><label for="phoneNumber">Phone Number:</label><br><input type="tel" id="phoneNumber" name="phoneNumber" pattern="[0-9]{10}" placeholder="1234567890" required><br><br><button type="submit">Submit</button></form>';  // Clear any previous content
+   
+}
+
+async function addAMajor() {
+     const heading = document.querySelector("#content h1");
+        heading.textContent = "Add a Major";
+
+        document.querySelector('.admin-buttons').style.display = 'none';
+
+        // Create and insert the form
+        const majorList = document.querySelector('.major-list');
+        majorList.className = 'form';
+        majorList.innerHTML = `
+            <form id="majorForm">
+                <label for="majorName">Major Name (3 characters):</label><br>
+                <input type="text" id="majorName" name="majorName" maxlength="3" required><br><br>
+                <label for="majorDescription">Full Name of Major:</label><br>
+                <textarea id="majorDescription" name="majorDescription" rows="4" cols="50" required></textarea><br><br>
+                <button type="submit">Submit</button>
+            </form>`;
+
+            const majorForm = document.getElementById("majorForm");
+            majorForm.addEventListener("submit", (submitEvent) => {
+                submitEvent.preventDefault(); // Prevent the default form submission behavior
+
+                // Get form values
+                const majorName = document.getElementById("majorName").value;
+                const majorDescription = document.getElementById("majorDescription").value;
+
+                addAMajorAPIcall(majorName, majorDescription);
+
+                // Do something with the values (e.g., log them, send to an API)
+                console.log(`Major Name: ${majorName}`);
+                console.log(`Major Description: ${majorDescription}`);
+
+                // Optionally, provide feedback to the user
+                alert("Form submitted successfully!");
+
+                // Clear the form (optional)
+                majorForm.reset();
+            });
+};
+       
+async function addAMajorAPIcall(majorName, majorDescription) {
+    try {
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:3000/api/add-a-major", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ majorName, majorDescription })
+        });
+
+        if (!response.ok) {
+            const errorDetails = await response.json(); 
+            console.error('Failure:', errorDetails);
+            throw new Error('Failed to add major');
+        } else {
+            const data = await response.json();
+            console.log('Major added successfully:', data);
+        }
+
+        /**const majors = await response.json(); // Assuming backend sends JSON
+        const majorList = document.querySelector('.major-list');
+        majorList.innerHTML = '';  // Clear any previous majors
+
+        majors.forEach(major => {
+            const majorItem = document.createElement("div");
+            majorItem.classList.add("major-item");
+            majorItem.innerHTML = `
+                <h3>${major.major_name}</h3>
+                <p>${major.descritption}</p>
+            `;
+            majorList.appendChild(majorItem);
+        });**/
+    } catch (error) {
+        console.error("Error displaying majors:", error);
+    }
+    
+}
+
+async function returnToDashboard() {
+    const heading = document.querySelector("#content h1");
+    heading.textContent = "Dashboard";
+
+    document.querySelector('.admin-buttons').style.display = 'block';
+
+    const navBar = document.querySelector('.admin-info');
+    navBar.innerHTML = '';  // Clear any previous text
+    const majorList = document.querySelector('.major-list');
+    majorList.innerHTML = '';  // Clear any previous text
 }

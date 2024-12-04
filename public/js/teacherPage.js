@@ -221,3 +221,84 @@ async function changeStatusForCourse(courseId) {
         console.error("Error during status change:", error);
     }
 }
+
+async function addACourse() {
+    const content = document.querySelector(".course-dashboard");
+    content.innerHTML = "<h2>Add a Course<h2>";
+
+    document.querySelector('.course-dashboard-inactive').style.display = 'none';
+
+    // Create and insert the form
+    const formHTML = `
+        <form id="addCourseForm" class="form">
+            <div class="add-course">
+                <label for="courseNumber">Course Number:</label>
+                <input type="number" id="courseNumber" name="courseNumber" min="1" required>
+            </div>
+            <div class="add-course">
+                <label for="courseName">Course Name:</label>
+                <input type="text" id="courseName" name="courseName" required>
+            </div>
+            <div class="add-course">
+                <label for="courseDescription">Course Description:</label>
+                <textarea id="courseDescription" name="courseDescription" rows="4" required></textarea>
+            </div>
+            <div class="add-course">
+                <label for="capacity">Max Capacity:</label>
+                <input type="number" id="capacity" name="capacity" min="1" required>
+            </div>
+            <div class="add-course">
+                <button type="submit" id="passChange">Submit</button>
+            </div>
+        </form>
+    `;
+    content.innerHTML += formHTML;
+
+    const courseForm = document.getElementById("addCourseForm");
+    courseForm.addEventListener("submit", (submitEvent) => {
+        
+        submitEvent.preventDefault(); // Prevent the default form submission behavior
+
+        // Get form values
+        const courseNumber = parseInt(document.getElementById("courseNumber").value, 10);
+        const courseName = document.getElementById("courseName").value;
+        const courseDescription = document.getElementById("courseDescription").value;
+        const capacity = parseInt(document.getElementById("capacity").value, 10);
+
+        console.log("Coursename:", courseName);
+
+        addACourseAPIcall(courseNumber, courseName, courseDescription, capacity);
+
+        // Optionally, provide feedback to the user
+        alert("Form submitted successfully!");
+
+        // Clear the form (optional)
+        courseForm.reset();
+    });
+};
+      
+async function addACourseAPIcall(courseNumber, courseName, courseDescription, capacity) {
+   try {
+       const token = localStorage.getItem("token");
+       const response = await fetch("http://localhost:3000/api/add-a-course", {
+           method: "POST",
+           headers: {
+               "Authorization": `Bearer ${token}`,
+               "Content-Type": "application/json"
+           },
+           body: JSON.stringify({ courseNumber, courseName, courseDescription, capacity })
+       });
+
+       if (!response.ok) {
+           const errorDetails = await response.json(); 
+           console.error('Failure:', errorDetails);
+           throw new Error('Failed to add course');
+       } else {
+           const data = await response.json();
+           console.log('Course added successfully:', data);
+       }
+   } catch (error) {
+       console.error("Error displaying courses:", error);
+   }
+   
+}
